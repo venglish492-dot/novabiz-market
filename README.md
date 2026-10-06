@@ -1,36 +1,106 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 NovaBiz Assets — Платформа цифровых бизнес-активов нового поколения
 
-## Getting Started
+> Полноценный, работающий на автопилоте маркетплейс для продажи Notion-шаблонов, Excel-моделей, Google Sheets, PDF-гайдов и бизнес-пакетов с интерактивным 3D-интерфейсом и мгновенной доставкой файлов.
 
-First, run the development server:
+---
 
+## 💎 Ключевые возможности платформы
+
+### 1. Ультрасовременный 3D & UI/UX фронтенд
+- **Интерактивная 3D-сцена Three.js**: Парящие кристаллические полиэдры, реагирующие на движение курсора (плавный lerp-параллакс) и глубину скролла страницы.
+- **3 темы оформления**:
+  - 🌙 **Dark Cyber** (глубокий обсидиановый с фиолетово-синими градиентами)
+  - ☀️ **Clean Light** (минималистичный светлый интерфейс)
+  - ⚡ **Futuristic Neon** (сочный неоновый киберпанк с неоновым свечением borders)
+- **Мультиязычность (i18n)**: Мгновенное переключение RU / EN без перезагрузки страниц.
+- **Адаптивность 100%**: Оптимизировано для мобильных устройств, планшетов и 4K-мониторов.
+
+### 2. Наполненный каталог коммерческих продуктов
+В проект уже включены 8 проработанных, готовых к продаже продуктов:
+1. **SaaS Unit-Экономика & Финансовая модель 5 лет** (Excel + Google Sheets + 28 стр. гайд)
+2. **Ultimate Startup OS 2025** (24 реляционные базы Notion)
+3. **B2B Cold Outreach & Account-Based Marketing System** (45 скриптов писем + Notion CRM)
+4. **E-Commerce & Маркетплейсы: Финмодель, P&L и ДДС** (Wildberries, Ozon, WB Тарифы 2025)
+5. **CPO & Product Manager Playbook** (PRD, CustDev, North Star Metric, RICE скоринг)
+6. **Venture Pitch Deck Kit & Инвестиционный Пакет** (120+ слайдов Keynote, PPTX + Notion Data Room)
+7. **HR & Team Scaling System** (Воронка кандидатов ATS, онбординг 30-60-90, Review 360)
+8. **Freelance & Agency OS** (Клиентский портал, генератор КП, договоры и счета)
+
+### 3. Автопилот продаж и мгновенная выдача (0.4 сек)
+- **Корзина и промокоды**: Поддержка скидок (например, `START2025` - 20%, `BIZVIP` - 30%, `FREEDEMO` - 100% тест-драйв).
+- **Мульти-эквайринг**: Поддержка банковских карт РФ (СБП, T-Pay), международных карт (Stripe), криптовалюты USDT и мгновенного тестового режима Sandbox.
+- **Криптографическая защита**: Генерация уникального SHA-256 токена заказа, срока действия ссылки (7 дней), лимита скачиваний и персонального лицензионного ключа.
+- **Генератор цифрового манифеста**: Ссылка на скачивание генерирует официальный пакет с водяным знаком покупателя и прямыми ссылками на дублирование в Notion.
+
+### 4. Личный кабинет и Панель администратора
+- **Личный кабинет покупателя**: История покупок, повторное скачивание, активные коммерческие лицензии, переключение ролей.
+- **Панель управления маркетплейсом (`/admin`)**:
+  - Дашборд аналитики (Выручка, Количество заказов, Конверсия, Средний чек).
+  - Стрим заказов в реальном времени.
+  - Живое редактирование цен на товары с моментальным обновлением витрины.
+  - Управление промокодами.
+
+---
+
+## 🛠 Технологический стек
+
+| Слой | Технологии |
+|---|---|
+| **Фреймворк** | [Next.js](https://nextjs.org/) (App Router, React 19, TypeScript) |
+| **Стилизация & UI** | Tailwind CSS v4, Glassmorphism, CSS Custom Properties |
+| **3D & Графика** | [Three.js](https://threejs.org/) (WebGL Canvas, шейдерные материалы, частицы) |
+| **Иконки** | [Lucide React](https://lucide.dev/) |
+| **Анимация & Эффекты** | Canvas Confetti, CSS Keyframe Micro-interactions |
+| **Архитектура доставки** | Serverless API Route (`/api/download`) с генерацией манифеста и защищенных заголовков |
+
+---
+
+## 🚀 Быстрый старт
+
+### 1. Установка зависимостей (уже выполнено)
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Запуск в режиме разработки
+```bash
+npm run dev
+```
+Откройте [http://localhost:3000](http://localhost:3000) в браузере.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Сборка продакшн-версии
+```bash
+npm run build
+npm run start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 🌐 Развертывание и подключение домена
 
-To learn more about Next.js, take a look at the following resources:
+### Вариант 1: Vercel (Рекомендуется, 2 минуты)
+1. Загрузите код в ваш репозиторий GitHub/GitLab.
+2. Перейдите на [vercel.com](https://vercel.com) и нажмите **Add New Project** -> выберите репозиторий.
+3. Добавьте переменные окружения из `.env.example`.
+4. Нажмите **Deploy**.
+5. В настройках проекта Vercel перейдите в **Settings -> Domains** и введите ваш домен (например, `assets.yourcompany.com`).
+6. Добавьте указанную CNAME или A запись в DNS вашего регистратора доменов. SSL-сертификат выпустится автоматически!
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Вариант 2: Docker / VPS (Ubuntu + Nginx)
+```dockerfile
+FROM node:20-alpine AS runner
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+EXPOSE 3000
+CMD ["npm", "start"]
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🔑 Промокоды для тестирования
+- `START2025` — Скидка 20%
+- `BIZVIP` — Скидка 30%
+- `FREEDEMO` — 100% скидка (проверка полного цикла оформления и автовыдачи без оплаты)
