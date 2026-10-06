@@ -1,9 +1,10 @@
 'use client';
 
 import React from 'react';
-import { Sparkles, ShieldCheck, Heart, Terminal } from 'lucide-react';
+import { ShieldCheck, Heart, Terminal } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useStore } from '../../context/StoreContext';
+import VectorLabLogo from '../ui/VectorLabLogo';
 
 export default function Footer() {
   const { t } = useLanguage();
@@ -17,16 +18,7 @@ export default function Footer() {
           
           {/* Brand Info */}
           <div className="md:col-span-2 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-cyan-400 p-[2px]">
-                <div className="w-full h-full bg-[var(--bg-main)] rounded-[10px] flex items-center justify-center">
-                  <Sparkles className="w-5 h-5 text-cyan-400" />
-                </div>
-              </div>
-              <span className="text-xl font-black bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">
-                NOVABIZ ASSETS
-              </span>
-            </div>
+            <VectorLabLogo size={42} />
 
             <p className="text-sm text-[var(--text-muted)] max-w-sm leading-relaxed">
               {t('footerDesc')}
@@ -85,7 +77,7 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-[var(--border-color)] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[var(--text-muted)]">
-          <p>© {new Date().getFullYear()} NovaBiz Digital Assets Marketplace. {t('footerLegal')}</p>
+          <p>© {new Date().getFullYear()} VectorLab Digital Asset Marketplace. {t('footerLegal')}</p>
 
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1">

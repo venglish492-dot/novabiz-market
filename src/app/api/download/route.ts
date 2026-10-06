@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
   const productId = searchParams.get('productId') || 'ASSET-PACK';
 
   const manifest = `================================================================================
-NOVABIZ ASSETS — OFFICIAL CRYPTOGRAPHIC DIGITAL ASSET PACKAGE
+VECTORLAB ASSETS — OFFICIAL CRYPTOGRAPHIC DIGITAL ASSET PACKAGE
 ================================================================================
 
 ORDER IDENTIFIER: ${orderId}
@@ -19,7 +19,7 @@ LICENSE: Single-User Unlimited Business License (Commercial Rights Included)
 1. NOTION CLOUD WORKSPACES & TEMPLATES:
 --------------------------------------------------------------------------------
 To duplicate this Notion asset into your personal or team workspace:
-1. Open URL: https://notion.site/novabiz-template-duplicate-hub
+1. Open URL: https://notion.site/vectorlab-template-duplicate-hub
 2. Click "Duplicate" in top right corner.
 3. Select your destination workspace.
 
@@ -46,7 +46,7 @@ Technical Support: support@novabiz-assets.pro
     status: 200,
     headers: {
       'Content-Type': 'text/plain; charset=utf-8',
-      'Content-Disposition': `attachment; filename="NovaBiz_${orderId}_Package.txt"`
+      'Content-Disposition': `attachment; filename="VectorLab_${orderId}_Package.txt"`
     }
   });
 }

@@ -11,9 +11,10 @@ import UserDashboardModal from '../components/user/UserDashboardModal';
 import AdminModal from '../components/admin/AdminModal';
 
 export const metadata: Metadata = {
-  title: 'NovaBiz Assets — Маркетплейс цифровых бизнес-документов и моделей',
-  description: 'Автономная платформа цифровых бизнес-активов: финансовые модели, шаблоны Notion, калькуляторы Excel и чек-листы с мгновенной автовыдачей за 0.4 сек.',
+  title: 'VectorLab — Лаборатория цифровых бизнес-активов и моделей',
+  description: 'Автономная платформа цифровых бизнес-активов VectorLab: проверенные финансовые модели, шаблоны Notion, калькуляторы Excel и чек-листы с мгновенной автовыдачей за 0.4 сек.',
   keywords: [
+    'VectorLab',
     'Notion шаблоны для бизнеса',
     'Финансовая модель SaaS Excel',
     'Калькулятор Wildberries Ozon юнит экономика',
@@ -21,9 +22,9 @@ export const metadata: Metadata = {
     'Startup OS Notion',
     'Венчурный питч дек'
   ],
-  authors: [{ name: 'NovaBiz Team' }],
+  authors: [{ name: 'VectorLab' }],
   openGraph: {
-    title: 'NovaBiz Assets — Премиальные цифровые активы для бизнеса',
+    title: 'VectorLab — Премиальные цифровые активы для роста бизнеса',
     description: 'Готовые финансовые модели, Notion OS и шаблоны с автоматической выдачей сразу после оплаты.',
     type: 'website'
   }

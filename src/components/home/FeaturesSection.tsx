@@ -46,8 +46,8 @@ export default function FeaturesSection() {
           </div>
           <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-[var(--text-main)] mb-4">
             Почему лидеры выбирают{' '}
-            <span className="bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">
-              NovaBiz
+            <span className="bg-gradient-to-r from-cyan-400 to-indigo-400 bg-clip-text text-transparent">
+              VectorLab
             </span>
           </h2>
           <p className="text-base sm:text-lg text-[var(--text-muted)]">

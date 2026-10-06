@@ -154,7 +154,7 @@ export const TRANSLATIONS = {
     faqSubtitle: 'Всё, что вам нужно знать об автовыдаче, форматах и лицензиях',
 
     // Footer
-    footerDesc: 'Автономная платформа цифровых активов для предпринимателей, маркетологов и фаундеров.',
+    footerDesc: 'VectorLab — автономная цифровая лаборатория бизнес-активов для предпринимателей, маркетологов и фаундеров.',
     footerLegal: 'Все права защищены. Мгновенная доставка цифрового контента по протоколу SSL.',
     allSystemsOperational: 'Автопилот: Все шлюзы онлайн'
   },
@@ -313,7 +313,7 @@ export const TRANSLATIONS = {
     faqSubtitle: 'Everything you need to know about instant delivery, file formats, and licensing',
 
     // Footer
-    footerDesc: 'Autonomous digital business asset marketplace for founders, operators, and growth leaders.',
+    footerDesc: 'VectorLab — Autonomous digital business asset laboratory for founders, operators, and growth leaders.',
     footerLegal: 'All rights reserved. 256-bit SSL cryptographic file delivery.',
     allSystemsOperational: 'Autopilot: All systems operational'
   }

@@ -17,6 +17,7 @@ import {
 import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { useStore } from '../../context/StoreContext';
+import VectorLabLogo from '../ui/VectorLabLogo';
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
@@ -37,28 +38,8 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         
         {/* Brand Logo */}
-        <a href="#" className="flex items-center gap-3 group">
-          <div className="relative w-11 h-11 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-cyan-400 p-[2px] shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform duration-300">
-            <div className="w-full h-full bg-[var(--bg-main)] rounded-[10px] flex items-center justify-center">
-              <Sparkles className="w-6 h-6 text-indigo-400 group-hover:text-cyan-400 transition-colors" />
-            </div>
-            <div className="absolute -top-1 -right-1 w-3 h-3 bg-cyan-400 rounded-full animate-ping" />
-            <div className="absolute -top-1 -right-1 w-3 h-3 bg-cyan-400 rounded-full" />
-          </div>
-
-          <div className="flex flex-col">
-            <div className="flex items-center gap-2">
-              <span className="text-xl font-black tracking-tight bg-gradient-to-r from-indigo-400 via-purple-300 to-cyan-300 bg-clip-text text-transparent">
-                NOVABIZ
-              </span>
-              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
-                PRO 2025
-              </span>
-            </div>
-            <span className="text-xs text-[var(--text-muted)] tracking-wider uppercase font-medium">
-              Digital Assets Autopilot
-            </span>
-          </div>
+        <a href="#" className="flex items-center group">
+          <VectorLabLogo size={42} />
         </a>
 
         {/* Desktop Navigation Links */}
