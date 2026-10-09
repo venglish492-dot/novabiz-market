@@ -1,103 +1,463 @@
 @import "tailwindcss";
 
+/*
+ * Vektor Lab design tokens.
+ * Every colour, radius, shadow and motion value used by the UI is defined here
+ * and mapped into Tailwind utilities through `@theme inline` below
+ * (e.g. `bg-surface`, `text-fg-muted`, `border-line`).
+ */
+
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: #07080a;
+  --bg-glow: rgba(110, 128, 255, 0.10);
+  --surface: #0c0e12;
+  --surface-2: #111419;
+  --surface-3: #171b22;
+  --overlay: rgba(4, 5, 8, 0.72);
+
+  --line: rgba(255, 255, 255, 0.07);
+  --line-strong: rgba(255, 255, 255, 0.14);
+
+  --fg: #eef0f5;
+  --fg-muted: #a2a8b5;
+  --fg-subtle: #6d7380;
+
+  --accent: #8b9cff;
+  --accent-strong: #a9b6ff;
+  --accent-soft: rgba(139, 156, 255, 0.12);
+  --accent-2: #62d6e8;
+  --accent-2-soft: rgba(98, 214, 232, 0.12);
+
+  --primary: #f3f4f7;
+  --primary-hover: #ffffff;
+  --primary-fg: #08090c;
+
+  --success: #43d197;
+  --success-soft: rgba(67, 209, 151, 0.12);
+  --warning: #f2b84b;
+  --warning-soft: rgba(242, 184, 75, 0.12);
+  --danger: #ff7272;
+  --danger-soft: rgba(255, 114, 114, 0.12);
+
+  --shadow-sm: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 1px 0 rgba(255, 255, 255, 0.05) inset, 0 12px 32px -12px rgba(0, 0, 0, 0.7);
+  --shadow-lg: 0 1px 0 rgba(255, 255, 255, 0.06) inset, 0 32px 80px -24px rgba(0, 0, 0, 0.85);
+
+  --grain-opacity: 0.035;
+  --three-primary: #8b9cff;
+  --three-secondary: #62d6e8;
+  --three-ink: #dfe4ff;
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+
+  --bg: #f3f4f6;
+  --bg-glow: rgba(70, 90, 255, 0.07);
+  --surface: #ffffff;
+  --surface-2: #f8f9fb;
+  --surface-3: #eef0f4;
+  --overlay: rgba(16, 18, 26, 0.38);
+
+  --line: rgba(12, 16, 28, 0.08);
+  --line-strong: rgba(12, 16, 28, 0.16);
+
+  --fg: #0b0d12;
+  --fg-muted: #4a5161;
+  --fg-subtle: #7b8292;
+
+  --accent: #3e50e6;
+  --accent-strong: #2f3fcf;
+  --accent-soft: rgba(62, 80, 230, 0.08);
+  --accent-2: #0b8ea6;
+  --accent-2-soft: rgba(11, 142, 166, 0.08);
+
+  --primary: #0b0d12;
+  --primary-hover: #1d212b;
+  --primary-fg: #ffffff;
+
+  --success: #0f9a63;
+  --success-soft: rgba(15, 154, 99, 0.09);
+  --warning: #b77806;
+  --warning-soft: rgba(183, 120, 6, 0.1);
+  --danger: #d93a3a;
+  --danger-soft: rgba(217, 58, 58, 0.08);
+
+  --shadow-sm: 0 1px 2px rgba(16, 20, 32, 0.06);
+  --shadow-md: 0 1px 2px rgba(16, 20, 32, 0.04), 0 12px 32px -14px rgba(16, 20, 32, 0.18);
+  --shadow-lg: 0 2px 4px rgba(16, 20, 32, 0.04), 0 32px 72px -28px rgba(16, 20, 32, 0.28);
+
+  --grain-opacity: 0;
+  --three-primary: #3e50e6;
+  --three-secondary: #0b8ea6;
+  --three-ink: #1b2140;
+}
+
+/* Experimental, opt-in theme. Kept deliberately restrained. */
+[data-theme="neon"] {
+  color-scheme: dark;
+
+  --bg: #05040a;
+  --bg-glow: rgba(255, 43, 214, 0.08);
+  --surface: #0b0a14;
+  --surface-2: #110f1d;
+  --surface-3: #181528;
+  --overlay: rgba(3, 2, 8, 0.75);
+
+  --line: rgba(0, 240, 255, 0.10);
+  --line-strong: rgba(0, 240, 255, 0.22);
+
+  --fg: #f4f2ff;
+  --fg-muted: #b3acd6;
+  --fg-subtle: #7a7299;
+
+  --accent: #00e5ff;
+  --accent-strong: #6ff3ff;
+  --accent-soft: rgba(0, 229, 255, 0.10);
+  --accent-2: #ff3bd4;
+  --accent-2-soft: rgba(255, 59, 212, 0.10);
+
+  --primary: #00e5ff;
+  --primary-hover: #6ff3ff;
+  --primary-fg: #04030a;
+
+  --success: #3dffb0;
+  --success-soft: rgba(61, 255, 176, 0.1);
+  --warning: #ffd23d;
+  --warning-soft: rgba(255, 210, 61, 0.1);
+  --danger: #ff5c8a;
+  --danger-soft: rgba(255, 92, 138, 0.1);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 12px 32px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(0, 229, 255, 0.04);
+  --shadow-lg: 0 32px 80px -24px rgba(0, 0, 0, 0.9), 0 0 48px -24px rgba(0, 229, 255, 0.25);
+
+  --grain-opacity: 0.04;
+  --three-primary: #00e5ff;
+  --three-secondary: #ff3bd4;
+  --three-ink: #e9fbff;
+}
+
+@theme inline {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-overlay: var(--overlay);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-2: var(--accent-2);
+  --color-accent-2-soft: var(--accent-2-soft);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-fg: var(--primary-fg);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-2xl: 28px;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+
+  --animate-fade-in: fade-in 0.4s var(--ease-standard) both;
+  --animate-fade-up: fade-up 0.7s var(--ease-out-expo) both;
+  --animate-scale-in: scale-in 0.3s var(--ease-out-expo) both;
+  --animate-slide-in-right: slide-in-right 0.45s var(--ease-out-expo) both;
+  --animate-slide-in-up: slide-in-up 0.45s var(--ease-out-expo) both;
+  --animate-shimmer: shimmer 1.6s linear infinite;
+  --animate-pop: pop 0.35s var(--ease-out-expo);
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: translateY(6px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes slide-in-right {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes slide-in-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
+}
+
+@keyframes pop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.22); }
+  100% { transform: scale(1); }
+}
+
 @layer base {
-  :root {
-    --bg-main: #090a10;
-    --bg-card: rgba(18, 20, 32, 0.75);
-    --bg-card-hover: rgba(28, 32, 50, 0.9);
-    --border-color: rgba(255, 255, 255, 0.1);
-    --text-main: #f8fafc;
-    --text-muted: #94a3b8;
-    --accent-primary: #6366f1;
-    --accent-secondary: #06b6d4;
-    --accent-glow: rgba(99, 102, 241, 0.35);
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
   }
 
-  [data-theme="light"], .theme-light {
-    --bg-main: #f8fafc;
-    --bg-card: rgba(255, 255, 255, 0.85);
-    --bg-card-hover: rgba(255, 255, 255, 0.98);
-    --border-color: rgba(15, 23, 42, 0.08);
-    --text-main: #0f172a;
-    --text-muted: #64748b;
-    --accent-primary: #4f46e5;
-    --accent-secondary: #0284c7;
-    --accent-glow: rgba(79, 70, 229, 0.2);
+  body {
+    background-color: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+    min-height: 100dvh;
+    overflow-x: clip;
   }
 
-  [data-theme="neon"], .theme-neon {
-    --bg-main: #030408;
-    --bg-card: rgba(10, 14, 28, 0.82);
-    --bg-card-hover: rgba(18, 24, 48, 0.95);
-    --border-color: rgba(0, 245, 255, 0.25);
-    --text-main: #ffffff;
-    --text-muted: #a5f3fc;
-    --accent-primary: #00f5ff;
-    --accent-secondary: #ff007f;
-    --accent-glow: rgba(0, 245, 255, 0.5);
+  /* Subtle film grain — adds depth to dark surfaces without visual noise. */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: var(--grain-opacity);
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--primary-fg);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  a,
+  button,
+  [role="button"],
+  summary {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button:not(:disabled),
+  [role="button"],
+  summary {
+    cursor: pointer;
+  }
+
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
+
+  img,
+  svg,
+  video,
+  canvas {
+    display: block;
+    max-width: 100%;
+  }
+
+  [hidden] {
+    display: none !important;
   }
 }
 
-html {
-  scroll-behavior: smooth;
-  color-scheme: dark light;
+@utility container-page {
+  width: 100%;
+  max-width: 1320px;
+  margin-inline: auto;
+  padding-inline: 16px;
+  @media (min-width: 640px) {
+    padding-inline: 24px;
+  }
+  @media (min-width: 1024px) {
+    padding-inline: 40px;
+  }
 }
 
-body {
-  background-color: var(--bg-main);
-  color: var(--text-main);
-  min-height: 100vh;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  overflow-x: hidden;
+/* Typography scale */
+@utility t-display {
+  font-size: clamp(2.6rem, 1.4rem + 5.2vw, 5.6rem);
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+  font-weight: 600;
+}
+@utility t-h1 {
+  font-size: clamp(2.1rem, 1.5rem + 2.6vw, 3.6rem);
+  line-height: 1.04;
+  letter-spacing: -0.04em;
+  font-weight: 600;
+}
+@utility t-h2 {
+  font-size: clamp(1.7rem, 1.3rem + 1.6vw, 2.6rem);
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  font-weight: 600;
+}
+@utility t-h3 {
+  font-size: clamp(1.2rem, 1.05rem + 0.6vw, 1.5rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+}
+@utility t-lead {
+  font-size: clamp(1.02rem, 0.95rem + 0.35vw, 1.2rem);
+  line-height: 1.6;
+  color: var(--fg-muted);
+}
+@utility t-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  line-height: 1.2;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+}
+@utility t-mono {
+  font-family: var(--font-mono);
+  font-feature-settings: "zero";
 }
 
-/* Glassmorphism utility */
-.glass-panel {
-  background: var(--bg-card);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--border-color);
+/* Surfaces */
+@utility glass {
+  background: color-mix(in oklab, var(--bg) 84%, transparent);
+  backdrop-filter: saturate(140%) blur(18px);
+  -webkit-backdrop-filter: saturate(140%) blur(18px);
+}
+@utility hairline-grid {
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
-.glass-panel-hover {
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+@layer components {
+  /* Prose for legal & long-form pages */
+  .prose-vl {
+    color: var(--fg-muted);
+    line-height: 1.75;
+    font-size: 1rem;
+  }
+  .prose-vl h2 {
+    color: var(--fg);
+    font-size: 1.3rem;
+    letter-spacing: -0.02em;
+    font-weight: 600;
+    margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+  }
+  .prose-vl h3 {
+    color: var(--fg);
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-top: 1.75rem;
+    margin-bottom: 0.5rem;
+  }
+  .prose-vl p { margin-top: 0.75rem; }
+  .prose-vl ul { margin-top: 0.75rem; padding-left: 1.2rem; list-style: disc; }
+  .prose-vl li { margin-top: 0.35rem; }
+  .prose-vl a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+  .prose-vl strong { color: var(--fg); font-weight: 600; }
+
+  /* Skeleton */
+  .skeleton {
+    background: linear-gradient(90deg, var(--surface-2) 0%, var(--surface-3) 50%, var(--surface-2) 100%);
+    background-size: 200% 100%;
+    animation: var(--animate-shimmer);
+    border-radius: var(--radius-md);
+  }
+
+  /* Scroll reveal (progressive: content is visible without JS) */
+  .reveal {
+    transition: opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo);
+  }
+  .js .reveal:not([data-revealed]) {
+    opacity: 0;
+    transform: translateY(18px);
+  }
 }
 
-.glass-panel-hover:hover {
-  background: var(--bg-card-hover);
-  border-color: var(--accent-primary);
-  transform: translateY(-3px);
-  box-shadow: 0 16px 32px -12px var(--accent-glow);
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .js .reveal:not([data-revealed]) {
+    opacity: 1;
+    transform: none;
+  }
 }
 
-/* Neon Glow Accents */
-.theme-neon .neon-glow-btn {
-  box-shadow: 0 0 20px rgba(0, 245, 255, 0.45);
+/* Category tones — a single restrained accent per discipline, used in previews. */
+:root,
+[data-theme="dark"],
+[data-theme="neon"] {
+  --tone-data: #43d197;
+  --tone-notion: #d9dce4;
+  --tone-business: #f2b84b;
+  --tone-marketing: #ff8f6b;
+  --tone-product: #8b9cff;
+  --tone-slides: #ff7aa8;
+  --tone-design: #b48cff;
+  --tone-development: #62d6e8;
+  --tone-ai: #5ee1ff;
+  --tone-assets: #ffd166;
 }
 
-.theme-neon .neon-glow-btn:hover {
-  box-shadow: 0 0 30px rgba(255, 0, 127, 0.6);
-}
-
-.theme-neon .neon-border-pulse {
-  border: 1px solid #00f5ff;
-  box-shadow: 0 0 15px rgba(0, 245, 255, 0.3);
-}
-
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--bg-main);
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.3);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-primary);
+[data-theme="light"] {
+  --tone-data: #0f9a63;
+  --tone-notion: #3a3f4b;
+  --tone-business: #b77806;
+  --tone-marketing: #d2532b;
+  --tone-product: #3e50e6;
+  --tone-slides: #c83a6e;
+  --tone-design: #7c4ddb;
+  --tone-development: #0b8ea6;
+  --tone-ai: #0a86b8;
+  --tone-assets: #a57900;
 }

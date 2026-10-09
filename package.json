@@ -1,28 +1,42 @@
 {
-  "name": "novabiz-market",
-  "version": "0.1.0",
+  "name": "vektor-lab",
+  "version": "1.0.0",
   "private": true,
+  "type": "module",
+  "description": "Vektor Lab — premium digital products marketplace (vektorlab.uz)",
+  "engines": {
+    "node": ">=20.9.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test --experimental-strip-types tests/unit/*.test.ts",
+    "test:e2e": "playwright test",
+    "db:seed:generate": "node --experimental-strip-types scripts/generate-seed.ts > supabase/seed.sql"
   },
   "dependencies": {
-    "@types/canvas-confetti": "^1.9.0",
-    "@types/three": "^0.186.0",
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.117.3",
     "canvas-confetti": "^1.9.4",
     "lucide-react": "^1.52.0",
     "next": "16.3.8",
     "react": "19.2.8",
     "react-dom": "19.2.8",
-    "three": "^0.186.1"
+    "server-only": "^0.0.1",
+    "three": "^0.186.1",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
+    "@playwright/test": "^1.64.0",
     "@tailwindcss/postcss": "^4",
+    "@types/canvas-confetti": "^1.9.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/three": "^0.186.0",
     "eslint": "^9",
     "eslint-config-next": "16.3.8",
     "tailwindcss": "^4",
