@@ -23,6 +23,7 @@ interface Palette {
   primary: THREE.Color;
   secondary: THREE.Color;
   ink: THREE.Color;
+  module: THREE.Color;
   background: THREE.Color;
 }
 
@@ -33,6 +34,7 @@ function readPalette(): Palette {
     primary: new THREE.Color(get('--three-primary', '#8b9cff')),
     secondary: new THREE.Color(get('--three-secondary', '#62d6e8')),
     ink: new THREE.Color(get('--three-ink', '#dfe4ff')),
+    module: new THREE.Color(get('--three-module', get('--three-ink', '#dfe4ff'))),
     background: new THREE.Color(get('--bg', '#07080a')),
   };
 }
@@ -206,7 +208,7 @@ export default function HeroScene({ onError }: { onError?: () => void }) {
 
     const moduleCount = lowPower ? 14 : 26;
     const moduleGeometry = track(new THREE.BoxGeometry(0.075, 0.075, 0.075));
-    const moduleMaterial = track(new THREE.MeshStandardMaterial({ color: palette.ink, metalness: 0.6, roughness: 0.3 }));
+    const moduleMaterial = track(new THREE.MeshStandardMaterial({ color: palette.module, metalness: 0.25, roughness: 0.4 }));
     const modules = new THREE.InstancedMesh(moduleGeometry, moduleMaterial, moduleCount);
     ring.add(modules);
     const moduleOffsets = Array.from({ length: moduleCount }, (_, i) => (i / moduleCount) * Math.PI * 2 + (i % 3) * 0.05);
@@ -265,7 +267,7 @@ export default function HeroScene({ onError }: { onError?: () => void }) {
       beamMaterial.color.copy(palette.primary);
       pulseMaterial.color.copy(palette.secondary);
       ringMaterial.color.copy(palette.ink);
-      moduleMaterial.color.copy(palette.ink);
+      moduleMaterial.color.copy(palette.module);
       particleMaterial.color.copy(palette.ink);
       rim.color.copy(palette.primary);
       fill.color.copy(palette.secondary);

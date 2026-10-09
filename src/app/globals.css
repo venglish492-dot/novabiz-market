@@ -50,6 +50,7 @@
   --three-primary: #8b9cff;
   --three-secondary: #62d6e8;
   --three-ink: #dfe4ff;
+  --three-module: #c9d0f5;
 }
 
 [data-theme="light"] {
@@ -94,6 +95,7 @@
   --three-primary: #3e50e6;
   --three-secondary: #0b8ea6;
   --three-ink: #1b2140;
+  --three-module: #7d8ae8;
 }
 
 /* Experimental, opt-in theme. Kept deliberately restrained. */
@@ -139,6 +141,7 @@
   --three-primary: #00e5ff;
   --three-secondary: #ff3bd4;
   --three-ink: #e9fbff;
+  --three-module: #e9fbff;
 }
 
 @theme inline {
