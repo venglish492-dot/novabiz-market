@@ -1,663 +1,752 @@
-import { Product, PromoCode } from '../types';
+import type { Product } from '../types/index.ts';
 
-export const INITIAL_PRODUCTS: Product[] = [
-  {
-    id: 'prod-saas-fin-model',
+/**
+ * Static catalog: the fallback data source when Supabase is not configured,
+ * and the seed source for the `products` table (see scripts/generate-seed.ts).
+ *
+ * Content policy:
+ *  - No ratings, review counts or download counts here. These are derived
+ *    from real data (approved, verified-purchase reviews) only.
+ *  - No compare-at prices unless a genuine regular price is configured.
+ *  - Product facts (what is included, counts of templates/slides/tabs) are
+ *    kept as described by the product owner. Outcome claims (conversion
+ *    rates, revenue, funding results) are not used.
+ */
+
+export const VEKTOR_LAB_CREATOR = {
+  id: 'c0000000-0000-4000-8000-000000000001',
+  slug: 'vektor-lab',
+  name: 'Vektor Lab',
+};
+
+type ProductSeed = Omit<
+  Product,
+  | 'status'
+  | 'creator'
+  | 'rating'
+  | 'compareAtAmount'
+  | 'thumbnail'
+  | 'gallery'
+  | 'previewUrl'
+  | 'documentationUrl'
+  | 'bundleProductIds'
+  | 'seo'
+  | 'changelog'
+  | 'createdAt'
+  | 'updatedAt'
+  | 'publishedAt'
+  | 'technologies'
+> &
+  Partial<Pick<Product, 'technologies' | 'changelog'>>;
+
+function defineProduct(seed: ProductSeed): Product {
+  return {
+    status: 'published',
+    creator: VEKTOR_LAB_CREATOR,
+    rating: null,
+    compareAtAmount: null,
+    thumbnail: null,
+    gallery: [],
+    previewUrl: null,
+    documentationUrl: null,
+    bundleProductIds: [],
+    seo: { title: null, description: null },
+    technologies: [],
+    changelog: [],
+    createdAt: `${seed.lastUpdated}T00:00:00.000Z`,
+    updatedAt: `${seed.lastUpdated}T00:00:00.000Z`,
+    publishedAt: `${seed.lastUpdated}T00:00:00.000Z`,
+    ...seed,
+  };
+}
+
+const notionDuplicateFaq = {
+  question: {
+    ru: 'Как я получу шаблон Notion?',
+    en: 'How do I receive the Notion template?',
+  },
+  answer: {
+    ru: 'После подтверждения оплаты в вашей библиотеке появится ссылка на дублирование. Откройте её, нажмите «Duplicate» и выберите своё рабочее пространство Notion.',
+    en: 'Once your payment is confirmed, a duplicate link appears in your library. Open it, click “Duplicate” and choose your Notion workspace.',
+  },
+};
+
+const sheetsFaq = {
+  question: {
+    ru: 'Работает ли модель в Google Таблицах?',
+    en: 'Does the model work in Google Sheets?',
+  },
+  answer: {
+    ru: 'Да. В комплект входят файл .xlsx и ссылка для копирования версии Google Sheets в ваш Google Drive.',
+    en: 'Yes. You get the .xlsx file plus a link to copy the Google Sheets version into your Google Drive.',
+  },
+};
+
+export const PRODUCTS: Product[] = [
+  defineProduct({
+    id: 'a1000000-0000-4000-8000-000000000001',
     slug: 'saas-unit-economics-financial-model',
+    productType: 'spreadsheet',
     title: {
-      ru: 'SaaS Unit-Экономика & Финансовая модель 5 лет',
-      en: 'SaaS Unit Economics & 5-Year Financial Model'
+      ru: 'Финансовая модель SaaS и юнит-экономика на 5 лет',
+      en: 'SaaS Unit Economics & 5-Year Financial Model',
+    },
+    subtitle: {
+      ru: 'Когорты, LTV/CAC, отток, P&L и денежный поток в одной модели',
+      en: 'Cohorts, LTV/CAC, churn, P&L and cash flow in one model',
     },
     shortDescription: {
-      ru: 'Профессиональная финмодель для B2B/B2C SaaS: когортный анализ, LTV/CAC, Churn, P&L, Cash Flow и сценарное планирование.',
-      en: 'Professional financial model for SaaS: cohort analysis, LTV/CAC, Churn, P&L, Cash Flow, and multi-scenario forecasting.'
+      ru: 'Финансовая модель для B2B и B2C SaaS: когортный анализ, LTV/CAC, отток, P&L, Cash Flow и три сценария роста.',
+      en: 'A financial model for B2B and B2C SaaS: cohort analysis, LTV/CAC, churn, P&L, cash flow and three growth scenarios.',
     },
-    fullDescription: {
-      ru: 'Комплексный инструмент для фаундеров и финансовых директоров. Разработан на основе стандартов международных венчурных фондов (Y Combinator, a16z). Включает автоматический расчет ключевых SaaS-метрик (MRR, ARR, Net Retention Rate, Payback Period), прогноз денежных потоков на 60 месяцев и динамические графики для питч-дека.',
-      en: 'Comprehensive framework for founders and CFOs built according to tier-1 VC standards. Features automated MRR/ARR, Net Retention, Payback Period calculations, 60-month cashflow projections, and presentation-ready investor charts.'
+    description: {
+      ru: 'Модель для фаундеров и финансовых руководителей SaaS-компаний. Рассчитывает ключевые метрики — MRR, ARR, Net Revenue Retention, срок окупаемости CAC — и строит прогноз денежных потоков на 60 месяцев. Сценарии роста переключаются в одном месте, а дашборд с графиками можно сразу использовать в материалах для инвесторов.',
+      en: 'A model for founders and finance leads at SaaS companies. It calculates key metrics — MRR, ARR, net revenue retention, CAC payback — and builds a 60-month cash flow forecast. Growth scenarios switch in one place, and the chart dashboard can go straight into investor materials.',
     },
-    category: 'financial-models',
-    price: 3490,
-    originalPrice: 7900,
-    currency: '₽',
-    rating: 4.96,
-    reviewsCount: 148,
-    badge: {
-      ru: 'Хит продаж',
-      en: 'Bestseller'
+    categoryId: 'financial-models',
+    secondaryCategoryIds: ['unit-economics', 'finance'],
+    goals: ['analyze-unit-economics', 'prepare-investors', 'build-saas', 'launch-startup'],
+    tags: ['SaaS', 'LTV/CAC', 'MRR', 'P&L', 'Cash Flow', 'Cohorts'],
+    formats: ['excel', 'google-sheets', 'pdf'],
+    software: ['Microsoft Excel', 'Google Sheets'],
+    audience: {
+      ru: ['Фаундеры SaaS-стартапов', 'Финансовые директора и аналитики', 'Команды, готовящиеся к раунду'],
+      en: ['SaaS founders', 'Finance leads and analysts', 'Teams preparing to raise'],
     },
-    tags: ['Excel', 'Google Sheets', 'SaaS', 'VC Ready', 'LTV/CAC'],
-    gradient: 'from-blue-600 via-indigo-600 to-cyan-500',
-    fileDetails: {
-      format: 'Excel (.xlsx)',
-      size: '8.4 MB',
-      pagesOrSheets: '14 вкладок формул',
-      version: 'v4.2 (2025 Edition)',
-      lastUpdated: 'Январь 2025'
+    useCases: {
+      ru: ['Планирование бюджета на год вперёд', 'Подготовка финансовой части питч-дека', 'Оценка влияния цены и оттока на выручку'],
+      en: ['Planning next year’s budget', 'Preparing the financial section of a pitch deck', 'Testing how pricing and churn affect revenue'],
     },
     features: {
       ru: [
-        'Автоматический расчет CAC, LTV, Churn Rate и когортного удержания',
-        '3 сценария роста: Консервативный, Базовый, Агрессивный',
-        'Интеграция с Google Таблицами в 1 клик',
-        'Готовый дашборд для отправки инвесторам и бизнес-ангелам',
-        'Видео-инструкция по заполнению за 25 минут'
+        'Расчёт CAC, LTV, оттока и когортного удержания',
+        'Три сценария роста: консервативный, базовый, агрессивный',
+        'Прогноз P&L и денежного потока на 60 месяцев',
+        'Дашборд ключевых метрик с графиками для инвесторов',
+        'Версия для Google Sheets',
       ],
       en: [
-        'Automated calculation of CAC, LTV, Churn, and cohort retention',
-        '3 dynamic growth scenarios: Conservative, Base, Aggressive',
-        '1-click Google Sheets import and live synchronization',
-        'Investor-ready executive dashboard for pitch decks',
-        '25-minute comprehensive video onboarding guide'
-      ]
+        'CAC, LTV, churn and cohort retention calculations',
+        'Three growth scenarios: conservative, base and aggressive',
+        '60-month P&L and cash flow forecast',
+        'Key-metrics dashboard with investor-ready charts',
+        'Google Sheets version',
+      ],
     },
-    includedFiles: {
+    includedItems: {
       ru: [
-        'SaaS_Financial_Model_v4.2.xlsx (Формулы и макросы)',
-        'Google_Sheets_Access_Link.pdf (Ссылка на копирование в облако)',
-        'Investor_KPI_Dashboard_Template.xlsx',
-        'Step-by-Step_Guide_Founder_Edition.pdf (28 стр.)'
+        'Финансовая модель SaaS (.xlsx)',
+        'Ссылка на копию в Google Sheets (PDF)',
+        'Шаблон дашборда KPI для инвесторов (.xlsx)',
+        'Пошаговое руководство по заполнению (PDF, 28 страниц)',
       ],
       en: [
-        'SaaS_Financial_Model_v4.2.xlsx (Complete formulas)',
-        'Google_Sheets_Cloud_Clone_Link.pdf',
-        'Investor_KPI_Dashboard_Template.xlsx',
-        'Step-by-Step_Guide_Founder_Edition.pdf (28 pages)'
-      ]
-    },
-    notionDemoUrl: 'https://demo.notion.site/saas-fin-model-preview',
-    sampleFileName: 'NovaBiz_SaaS_Financial_Model_2025.zip',
-    reviews: [
-      {
-        id: 'rev-1',
-        author: 'Михаил Резников',
-        role: 'CEO & Founder',
-        company: 'CloudPulse B2B',
-        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=faces',
-        rating: 5,
-        date: '14 февраля 2025',
-        comment: 'С этой финмоделью мы подняли Seed-раунд на $300k. Фонды особенно оценили когортный анализ и прозрачную логику unit-экономики. Сэкономили недели работы финансового консультанта.',
-        verified: true
-      },
-      {
-        id: 'rev-2',
-        author: 'Анна Воропаева',
-        role: 'CFO',
-        company: 'FinTrack',
-        avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100&h=100&fit=crop&crop=faces',
-        rating: 5,
-        date: '28 января 2025',
-        comment: 'Всё аккуратно рассортировано по вкладкам, формулы защищены от случайной поломки, дизайн таблиц просто эстетическое удовольствие. Однозначный мастхэв.',
-        verified: true
-      }
-    ]
-  },
-  {
-    id: 'prod-startup-os-notion',
-    slug: 'ultimate-startup-os-notion',
-    title: {
-      ru: 'Ultimate Startup OS 2025 (Notion Workspace)',
-      en: 'Ultimate Startup OS 2025 (Notion Workspace)'
-    },
-    shortDescription: {
-      ru: 'Всеобъемлющая операционная система для компании в Notion: CRM, база знаний, OKR, спринты, финансы и онбординг команды.',
-      en: 'All-in-one Notion operating system for your company: CRM, Company Wiki, OKRs, Agile sprints, payroll, and team onboarding.'
-    },
-    fullDescription: {
-      ru: 'Замените 10 разрозненных SaaS-сервисов одним идеально настроенным рабочим пространством Notion. Включает 24 связанных базы данных: управление задачами по Scrum/Kanban, карточки клиентов и пайплайн B2B-сделок, стратегические цели по системе OKR, базу знаний компании с матрицей доступов и дашборд руководителя.',
-      en: 'Replace 10 fragmented software tools with a single, perfectly orchestrated Notion workspace. Includes 24 interconnected relational databases: Scrum/Kanban project management, B2B deal pipeline CRM, quarterly OKRs, company wiki with access permissions, and CEO cockpit.'
-    },
-    category: 'notion-templates',
-    price: 2990,
-    originalPrice: 6500,
-    currency: '₽',
-    rating: 4.98,
-    reviewsCount: 312,
-    badge: {
-      ru: 'Выбор экспертов',
-      en: 'Staff Pick'
-    },
-    tags: ['Notion', 'Startup OS', 'CRM', 'OKRs', 'Team Workspace'],
-    gradient: 'from-purple-600 via-pink-600 to-rose-500',
-    fileDetails: {
-      format: 'Notion',
-      size: '24 Базы данных',
-      pagesOrSheets: '45+ страниц и шаблонов',
-      version: 'v5.0 (Notion 2.40+ Ready)',
-      lastUpdated: 'Февраль 2025'
-    },
-    features: {
-      ru: [
-        'Единый дашборд основателя с обзором выручки, спринтов и метрик',
-        'B2B CRM с авто-статусами, расчетом вероятности и контактами',
-        'Система OKR с автоматическим прогресс-баром по ключевым результатам',
-        'База регламентов, SOP и онбординга новых сотрудников',
-        'Мгновенное дублирование в личный или командный Notion аккаунт'
+        'SaaS financial model (.xlsx)',
+        'Google Sheets copy link (PDF)',
+        'Investor KPI dashboard template (.xlsx)',
+        'Step-by-step setup guide (PDF, 28 pages)',
       ],
-      en: [
-        'Executive CEO cockpit with high-level revenue and project tracking',
-        'Relational B2B CRM with lead scoring and pipeline management',
-        'Quarterly OKR tracker with automated progress bars and weights',
-        'Complete Standard Operating Procedures (SOP) & onboarding hub',
-        '1-click instant duplicate to your personal or team Notion'
-      ]
     },
-    includedFiles: {
-      ru: [
-        'Официальная ссылка на дублирование шаблона Notion OS 2025',
-        'Видео-руководство по кастомизации под ваш бизнес (40 мин)',
-        'Гайд по внедрению регламентов в команду (PDF)',
-        'Коллекция иконок и баннеров в стиле Minimalist Dark'
-      ],
-      en: [
-        'Official 1-click duplicate link for Notion Startup OS 2025',
-        'Workspace customization walkthrough video (40 mins)',
-        'Team onboarding & SOP implementation guide (PDF)',
-        'Minimalist dark icons & header covers asset pack'
-      ]
+    requirements: {
+      ru: ['Microsoft Excel (настольная версия) или Google Sheets', 'Базовое понимание SaaS-метрик'],
+      en: ['Microsoft Excel (desktop) or Google Sheets', 'A basic understanding of SaaS metrics'],
     },
-    notionDemoUrl: 'https://demo.notion.site/startup-os-workspace-preview',
-    sampleFileName: 'NovaBiz_Startup_OS_Notion_Duplicate_Pack.zip',
-    reviews: [
-      {
-        id: 'rev-3',
-        author: 'Артем Дронов',
-        role: 'Co-Founder & COO',
-        company: 'Veloce Media',
-        avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=faces',
-        rating: 5,
-        date: '5 марта 2025',
-        comment: 'Перевели всю команду из 16 человек из Asana и Trello в этот шаблон. Скорость координации выросла в разы, теперь каждый видит свои OKR и задачи.',
-        verified: true
-      }
-    ]
-  },
-  {
-    id: 'prod-cold-outreach-pack',
-    slug: 'b2b-cold-outreach-email-playbook',
-    title: {
-      ru: 'B2B Cold Outreach & Account-Based Marketing System',
-      en: 'B2B Cold Outreach & ABM Playbook Pack'
-    },
-    shortDescription: {
-      ru: '45 протестированных цепочек холодных email-писем для B2B, скрипты для LinkedIn, чек-листы по прогреву доменов и CRM лидогенерации.',
-      en: '45 battle-tested B2B cold email sequences, LinkedIn outreach scripts, domain deliverability setup, and Notion prospecting CRM.'
-    },
-    fullDescription: {
-      ru: 'Готовая система лидогенерации с открываемостью писем (Open Rate) до 78% и конверсией в демо-звонки 14%. Включает реальные шаблоны писем, которые принесли контракты в Enterprise и SMB, инструкции по обходу спам-фильтров (SPF, DKIM, DMARC), чек-лист копирайтинга и систему трекинга лидов.',
-      en: 'Turn-key outbound pipeline generating up to 78% open rates and 14% demo booking conversion. Includes exact email scripts that closed deals in enterprise and tech SMBs, technical deliverability walkthrough, and prospecting tracking framework.'
-    },
-    category: 'checklists-guides',
-    price: 1990,
-    originalPrice: 4200,
-    currency: '₽',
-    rating: 4.92,
-    reviewsCount: 89,
-    badge: {
-      ru: '+45 скриптов',
-      en: '45+ Scripts'
-    },
-    tags: ['B2B Sales', 'Cold Outreach', 'Email Scripts', 'Notion', 'PDF Guide'],
-    gradient: 'from-amber-500 via-orange-600 to-red-500',
-    fileDetails: {
-      format: 'PDF & Notion',
-      size: '14.2 MB',
-      pagesOrSheets: '84 страницы + Notion CRM',
-      version: 'v3.1 (2025 Update)',
-      lastUpdated: 'Январь 2025'
-    },
-    features: {
-      ru: [
-        '45 пошаговых сценариев холодных писем для разных сегментов',
-        'Скрипты первого контакта и фоллоу-апов в LinkedIn',
-        'Технический чек-лист настройки почты (без попадания в спам)',
-        'Промпты для ChatGPT/Claude для гипер-персонализации писем'
-      ],
-      en: [
-        '45 multi-step cold outreach cadences for various B2B niches',
-        'LinkedIn connection request & follow-up message scripts',
-        'Domain warm-up & SPF/DKIM/DMARC technical deliverability guide',
-        'AI prompt pack for mass personalization via LLMs'
-      ]
-    },
-    includedFiles: {
-      ru: [
-        'B2B_Outreach_Master_Playbook.pdf (84 стр.)',
-        'Cold_Email_Sequences_Copy_Paste_Book.pdf',
-        'Outreach_Lead_Tracker_Database (Notion ссылка)',
-        'Email_Deliverability_Audit_Checklist.xlsx'
-      ],
-      en: [
-        'B2B_Outreach_Master_Playbook.pdf (84 pages)',
-        'Cold_Email_Sequences_Copy_Paste_Book.pdf',
-        'Outreach_Lead_Tracker_Database (Notion link)',
-        'Email_Deliverability_Audit_Checklist.xlsx'
-      ]
-    },
-    sampleFileName: 'NovaBiz_B2B_Outreach_System_2025.zip',
-    reviews: [
-      {
-        id: 'rev-4',
-        author: 'Олег Самойлов',
-        role: 'Head of Growth',
-        company: 'LeadGenX',
-        avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=faces',
-        rating: 5,
-        date: '21 января 2025',
-        comment: 'Взяли 3 скрипта из раздела Enterprise, адаптировали под наш продукт — за первую же неделю назначили 11 квалифицированных созвонов. Окупилось в первые 3 часа.',
-        verified: true
-      }
-    ]
-  },
-  {
-    id: 'prod-ecom-calculator',
-    slug: 'ecommerce-pnl-cashflow-unit-economics',
-    title: {
-      ru: 'E-Commerce & Маркетплейсы: Финмодель, P&L и ДДС',
-      en: 'E-Commerce & Marketplaces: Unit Economics & Cashflow'
-    },
-    shortDescription: {
-      ru: 'Автоматизированная таблица Excel для расчетов на Wildberries, Ozon, Яндекс.Маркет и собственного интернет-магазина. Учет комиссий, логистики, рекламы и возвратов.',
-      en: 'Automated Excel accounting model for e-commerce stores and marketplaces: commission fees, fulfillment, marketing ROI, returns and cashflow.'
-    },
-    fullDescription: {
-      ru: 'Спасение для селлеров и директоров e-commerce. Рассчитывает реальную чистую прибыль с учетом скрытых расходов маркетплейсов, комиссий за эквайринг, логистику, хранение и долю выкупа. Включает ABC/XYZ-анализ ассортимента и калькулятор точки безубыточности для запуска новых товаров.',
-      en: 'Essential tool for DTC brands and marketplace sellers. Accurately calculates real bottom-line net profit after storage, fulfillment, marketing ROAS, commissions, and returns. Includes full ABC/XYZ product inventory matrix and break-even calculator.'
-    },
-    category: 'excel-sheets',
-    price: 2490,
-    originalPrice: 5500,
-    currency: '₽',
-    rating: 4.95,
-    reviewsCount: 164,
-    badge: {
-      ru: 'Обновлено',
-      en: 'Updated'
-    },
-    tags: ['Excel', 'Wildberries', 'Ozon', 'P&L', 'Unit Economics', 'E-Commerce'],
-    gradient: 'from-emerald-500 via-teal-600 to-cyan-600',
-    fileDetails: {
-      format: 'Excel (.xlsx)',
-      size: '6.7 MB',
-      pagesOrSheets: '11 взаимосвязанных вкладок',
-      version: 'v3.8 (WB/Ozon 2025 Тарифы)',
-      lastUpdated: 'Февраль 2025'
-    },
-    features: {
-      ru: [
-        'Калькулятор юнит-экономики каждого SKU с учетом процента выкупа',
-        'Управленческий отчет P&L (прибыли и убытки) и Cash Flow (ДДС)',
-        'Автоматический ABC/XYZ анализ прибыльности товарной матрицы',
-        'Расчет безопасного рекламного бюджета на основе маржинальности'
-      ],
-      en: [
-        'Per-SKU unit margin calculator with fulfillment and return rates',
-        'Integrated Executive P&L statement and dynamic Cash Flow budget',
-        'Automated ABC/XYZ product inventory profitability sorting',
-        'Maximum safe ad spend (ROAS) threshold calculator'
-      ]
-    },
-    includedFiles: {
-      ru: [
-        'Ecom_Marketplaces_UnitEconomics_v3.8.xlsx',
-        'Google_Sheets_Cloud_Version.pdf (прямая ссылка)',
-        'Video_Instruction_Calculation_Manual.mp4 (ссылка)',
-        'Таблица_Тарифов_и_Комиссий_2025.xlsx'
-      ],
-      en: [
-        'Ecom_Marketplaces_UnitEconomics_v3.8.xlsx',
-        'Google_Sheets_Cloud_Version.pdf',
-        'Video_Instruction_Calculation_Manual (link)',
-        'Fee_Structures_and_Commissions_Matrix.xlsx'
-      ]
-    },
-    sampleFileName: 'NovaBiz_ECommerce_Financial_Mastery.zip',
-    reviews: [
-      {
-        id: 'rev-5',
-        author: 'Елена Кузнецова',
-        role: 'Founder',
-        company: 'Nordic Home Shop',
-        avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop&crop=faces',
-        rating: 5,
-        date: '19 февраля 2025',
-        comment: 'Наконец-то увидела, какие товары генерировали минус из-за дорогой логистики и низкого процента выкупа. Перестроила ассортимент и подняла маржинальность на 8.4%.',
-        verified: true
-      }
-    ]
-  },
-  {
-    id: 'prod-cpo-product-playbook',
-    slug: 'product-manager-cpo-playbook-notion',
-    title: {
-      ru: 'CPO & Product Manager Playbook (Notion + PDF)',
-      en: 'CPO & Senior Product Manager Playbook'
-    },
-    shortDescription: {
-      ru: 'Полный инструментарий продакт-менеджера: шаблоны PRD, Customer Development интервью, North Star Metric дерево и фреймворки приоритезации (RICE, ICE, Kano).',
-      en: 'Ultimate product manager suite: battle-tested PRD templates, CustDev interview guides, North Star Metric tree, and prioritization scorecards.'
-    },
-    fullDescription: {
-      ru: 'Практическая библиотека артефактов для управления цифровыми продуктами. Содержит проверенные шаблоны документации, гайды интервью для проверки гипотез ценности, интерактивные калькуляторы приоритизации фичей и карту метрик для продуктовых команд любого масштаба.',
-      en: 'Battle-tested repository of product management artifacts. Includes BigTech-grade PRD specifications, customer discovery interview scripts, automated hypothesis prioritization scoring models, and North Star metric frameworks.'
-    },
-    category: 'notion-templates',
-    price: 2790,
-    originalPrice: 5900,
-    currency: '₽',
-    rating: 4.97,
-    reviewsCount: 112,
-    badge: {
-      ru: 'PRO Уровень',
-      en: 'PRO Level'
-    },
-    tags: ['Notion', 'Product Management', 'PRD', 'CustDev', 'RICE Score'],
-    gradient: 'from-violet-600 via-indigo-600 to-purple-800',
-    fileDetails: {
-      format: 'Notion',
-      size: '18 Баз данных',
-      pagesOrSheets: '35 готовых шаблонов',
-      version: 'v4.0 (2025 Edition)',
-      lastUpdated: 'Январь 2025'
-    },
-    features: {
-      ru: [
-        'Шаблоны PRD (Product Requirements Document) уровня BigTech компаний',
-        'Скрипты и трекер качественных интервью CustDev с клиентами',
-        'Автоматический калькулятор скоринга гипотез RICE & ICE',
-        'Интерактивное дерево метрик North Star Metric (NSM)'
-      ],
-      en: [
-        'BigTech-grade Product Requirement Document (PRD) templates',
-        'Customer Discovery / CustDev interview scripts & insights tracker',
-        'Automated RICE, ICE, and Kano hypothesis prioritization calculator',
-        'Visual interactive North Star Metric hierarchy tree'
-      ]
-    },
-    includedFiles: {
-      ru: [
-        'Notion_CPO_Playbook_Duplicate_Workspace',
-        'CustDev_Interview_Questions_Handbook.pdf (42 стр.)',
-        'Product_Discovery_Cheat_Sheets.pdf',
-        'Figma_UserFlow_Design_Kit_Tokens.pdf'
-      ],
-      en: [
-        'Notion_CPO_Playbook_Duplicate_Workspace',
-        'CustDev_Interview_Questions_Handbook.pdf (42 pages)',
-        'Product_Discovery_Cheat_Sheets.pdf',
-        'Figma_UserFlow_Design_Kit_Tokens.pdf'
-      ]
-    },
-    sampleFileName: 'NovaBiz_CPO_Product_Playbook_2025.zip',
-    reviews: [
-      {
-        id: 'rev-6',
-        author: 'Денис Марков',
-        role: 'Lead PM',
-        company: 'Fintech Neo',
-        avatar: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=100&h=100&fit=crop&crop=faces',
-        rating: 5,
-        date: '2 февраля 2025',
-        comment: 'Использую в работе со своей продуктовой командой каждый день. Шаблоны PRD экономят до 8 часов на каждую фичу, разработчикам всё понятно с первого раза.',
-        verified: true
-      }
-    ]
-  },
-  {
-    id: 'prod-pitch-deck-kit',
-    slug: 'venture-pitch-deck-kit-presentation',
-    title: {
-      ru: 'Venture Pitch Deck Kit & Инвестиционный Пакет',
-      en: 'Venture Pitch Deck Kit & Fundraising Asset Pack'
-    },
-    shortDescription: {
-      ru: '120+ слайдов для привлечения инвестиций в Keynote, PowerPoint и Google Slides. Структура Y Combinator и Sequoia Capital + Notion Data Room.',
-      en: '120+ investor-ready presentation slides for Keynote, PowerPoint and Slides based on Sequoia & YC frameworks, plus investor Data Room in Notion.'
-    },
-    fullDescription: {
-      ru: 'Премиальный конструктор презентаций для привлечения раундов Pre-Seed, Seed и Series A. Создан на базе визуального языка ведущих дизайн-агентств Кремниевой долины. Включает 120+ уникальных слайдов с инфографикой, структурами бизнес-моделей, графиками тяги и шаблоном Data Room в Notion.',
-      en: 'High-converting fundraising presentation toolkit for Pre-Seed, Seed, and Series A rounds. Designed following tier-1 Silicon Valley agency guidelines. Features 120+ custom vector master slides, market size diagrams, unit economic models, and Notion Virtual Data Room.'
-    },
-    category: 'startup-os',
-    price: 3890,
-    originalPrice: 8900,
-    currency: '₽',
-    rating: 4.99,
-    reviewsCount: 203,
-    badge: {
-      ru: 'ТОП для инвестиций',
-      en: 'Top Pitch Pack'
-    },
-    tags: ['Keynote', 'PowerPoint', 'Pitch Deck', 'Fundraising', 'Notion Data Room'],
-    gradient: 'from-amber-600 via-rose-600 to-pink-600',
-    fileDetails: {
-      format: 'PowerPoint + Notion',
-      size: '142 MB',
-      pagesOrSheets: '120+ уникальных слайдов',
-      version: 'v4.5 (Vector 4K)',
-      lastUpdated: 'Февраль 2025'
-    },
-    features: {
-      ru: [
-        '120+ выверенных слайдов в темной и светлой премиальной теме',
-        'Шаблоны слайдов: Проблема, Решение, Рынок TAM/SAM/SOM, Бизнес-модель, Команда',
-        'Готовый Notion Virtual Data Room для передачи инвесторам под NDA',
-        'Гайд по питчингу и ответам на каверзные вопросы инвесторов'
-      ],
-      en: [
-        '120+ master slides in both executive dark and clean light themes',
-        'Standardized slide structures: Problem, Solution, TAM/SAM/SOM, Team, Traction',
-        'Investor Virtual Data Room (VDR) Notion template with NDA disclaimer',
-        'Fundraising playbook: handling tricky angel & VC partner objections'
-      ]
-    },
-    includedFiles: {
-      ru: [
-        'Venture_Pitch_Deck_Master_2025.pptx (PowerPoint)',
-        'Venture_Pitch_Deck_Master_2025.key (Apple Keynote)',
-        'Google_Slides_Cloud_Edit_Link.pdf',
-        'Notion_Investor_Data_Room_Duplicate.pdf',
-        'Fundraising_Prep_Checklist_Guide.pdf (32 стр.)'
-      ],
-      en: [
-        'Venture_Pitch_Deck_Master_2025.pptx (PowerPoint)',
-        'Venture_Pitch_Deck_Master_2025.key (Apple Keynote)',
-        'Google_Slides_Cloud_Edit_Link.pdf',
-        'Notion_Investor_Data_Room_Duplicate.pdf',
-        'Fundraising_Prep_Checklist_Guide.pdf (32 pages)'
-      ]
-    },
-    sampleFileName: 'NovaBiz_Venture_Pitch_Deck_Kit.zip',
-    reviews: [
-      {
-        id: 'rev-7',
-        author: 'Константин Белов',
-        role: 'Founder',
-        company: 'NeuroSense AI',
-        avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=100&h=100&fit=crop&crop=faces',
-        rating: 5,
-        date: '10 февраля 2025',
-        comment: 'Дизайн выглядит на миллион долларов. Инвесторы на демо-дне отдельно отметили качество визуализации рынка и графиков тяги. Закрыли раунд за 3 недели.',
-        verified: true
-      }
-    ]
-  },
-  {
-    id: 'prod-hr-team-scaling-system',
-    slug: 'hr-team-scaling-onboarding-system',
-    title: {
-      ru: 'HR & Team Scaling System: Найм, Онбординг и Оценка',
-      en: 'HR & Team Scaling System: Hiring, Onboarding & Reviews'
-    },
-    shortDescription: {
-      ru: 'Полный пайплайн найма персонала: воронка кандидатов (ATS) в Notion, скоринг-карты собеседований, планы адаптации на 30-60-90 дней и Performance Review 360.',
-      en: 'End-to-end recruitment pipeline: Notion applicant tracking system (ATS), scorecard interviews, 30-60-90 day onboarding plans, and 360 reviews.'
-    },
-    fullDescription: {
-      ru: 'Готовая система управления персоналом для растущих технологических компаний. Помогает автоматизировать путь сотрудника: от составления профиля вакансии и проведения интервью до онбординга за первые недели и регулярной оценки результатов по методологии 360 градусов.',
-      en: 'Complete talent management and team scaling operating system. Streamlines employee lifecycle: from job description drafting and unbiased scorecard interviewing to structured 30-60-90 day onboarding roadmaps and 360-degree performance evaluation cycles.'
-    },
-    category: 'startup-os',
-    price: 2190,
-    originalPrice: 4800,
-    currency: '₽',
-    rating: 4.91,
-    reviewsCount: 76,
-    tags: ['Notion', 'HR', 'Recruiting', 'Onboarding', 'Performance Review'],
-    gradient: 'from-cyan-600 via-blue-600 to-indigo-700',
-    fileDetails: {
-      format: 'Notion',
-      size: '12 Баз данных',
-      pagesOrSheets: '28 готовых документов',
-      version: 'v2.6',
-      lastUpdated: 'Январь 2025'
-    },
-    features: {
-      ru: [
-        'Полноценная ATS-система найма для ведения кандидатов по стадиям',
-        'Скоринг-кард для оценки Hard и Soft skills без предвзятости',
-        'Интерактивный чеклист онбординга новичка с авто-напоминаниями',
-        'Форма и методология проведения оценки Performance Review 360°'
-      ],
-      en: [
-        'Full Applicant Tracking System (ATS) inside Notion with pipeline stages',
-        'Objective candidate scorecard for hard and soft skill assessment',
-        'Automated 30-60-90 day new hire onboarding checklists and buddy program',
-        'Performance Review 360° evaluation template & feedback guidelines'
-      ]
-    },
-    includedFiles: {
-      ru: [
-        'Notion_HR_Scaling_System_Duplicate_Workspace',
-        'Job_Descriptions_50_Tech_Roles_Handbook.pdf',
-        'Employee_Handbook_Starter_Template.docx',
-        'Interview_Scorecard_Rubric.xlsx'
-      ],
-      en: [
-        'Notion_HR_Scaling_System_Duplicate_Workspace',
-        'Job_Descriptions_50_Tech_Roles_Handbook.pdf',
-        'Employee_Handbook_Starter_Template.docx',
-        'Interview_Scorecard_Rubric.xlsx'
-      ]
-    },
-    sampleFileName: 'NovaBiz_HR_Scaling_System_2025.zip',
-    reviews: [
-      {
-        id: 'rev-8',
-        author: 'Ксения Лебедева',
-        role: 'HR Director',
-        company: 'ScaleUp Studio',
-        avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&h=100&fit=crop&crop=faces',
-        rating: 5,
-        date: '25 января 2025',
-        comment: 'Внедрили для масштабирования команды с 10 до 45 человек. Время онбординга сократилось в два раза, новички выходят на продуктивность с первой недели.',
-        verified: true
-      }
-    ]
-  },
-  {
-    id: 'prod-freelance-agency-os',
-    slug: 'freelance-agency-client-os-crm',
-    title: {
-      ru: 'Freelance & Agency OS: Клиенты, Договоры, Счета и CRM',
-      en: 'Freelance & Agency OS: Clients, Contracts, Invoicing & CRM'
-    },
-    shortDescription: {
-      ru: 'Все процессы агентства и фрилансера в одной системе: клиентский портал, выставление счетов, учет рабочего времени, шаблоны договоров и брифы.',
-      en: 'Everything for solo specialists & digital agencies: client portal, invoice generator, time tracker, proposal decks, and contract templates.'
-    },
-    fullDescription: {
-      ru: 'Универсальное цифровое решение для фрилансеров, студий и консалтинговых агентств. Объединяет клиентский портал в Notion, генератор коммерческих предложений, калькулятор рентабельности проектов в Excel и юридически проверенные шаблоны договоров и NDA.',
-      en: 'All-inclusive management cockpit for independent experts, studios, and agencies. Combines client portal in Notion, high-converting proposal builders, project profitability calculators in Excel, and verified legal agreements with mutual NDAs.'
-    },
-    category: 'excel-sheets',
-    price: 1890,
-    originalPrice: 3900,
-    currency: '₽',
-    rating: 4.94,
-    reviewsCount: 142,
-    badge: {
-      ru: 'Для экспертов',
-      en: 'For Experts'
-    },
-    tags: ['Notion', 'Excel', 'CRM', 'Agency', 'Freelance OS', 'Contracts'],
-    gradient: 'from-emerald-600 via-teal-600 to-blue-600',
-    fileDetails: {
-      format: 'PDF & Notion',
-      size: '19.8 MB',
-      pagesOrSheets: '22 шаблона и базы',
-      version: 'v3.2',
-      lastUpdated: 'Февраль 2025'
-    },
-    features: {
-      ru: [
-        'Клиентский портал (Client Portal), которым можно делиться по ссылке',
-        'Автоматический генератор коммерческих предложений (КП)',
-        'Юридически выверенные шаблоны договоров (РФ и международные NDA/SOW)',
-        'Калькулятор почасовой ставки и рентабельности проектов'
-      ],
-      en: [
-        'Shareable Notion Client Portal for real-time project transparency',
-        'High-converting Proposal & Scope of Work (SOW) builders',
-        'Lawyer-reviewed client contract and mutual NDA templates',
-        'Hourly rate & project profitability forecasting spreadsheet'
-      ]
-    },
-    includedFiles: {
-      ru: [
-        'Notion_Freelance_Agency_OS_Workspace',
-        'Шаблоны_Договоров_и_Актов_2025 (Word & PDF)',
-        'Project_Profitability_Calculator.xlsx',
-        'Client_Intake_Brief_Templates.pdf'
-      ],
-      en: [
-        'Notion_Freelance_Agency_OS_Workspace',
-        'Contract_and_Statement_of_Work_Templates (Word & PDF)',
-        'Project_Profitability_Calculator.xlsx',
-        'Client_Intake_Brief_Templates.pdf'
-      ]
-    },
-    sampleFileName: 'NovaBiz_Agency_Freelance_OS_2025.zip',
-    reviews: [
-      {
-        id: 'rev-9',
-        author: 'Сергей Поляков',
-        role: 'Design Agency Lead',
-        company: 'PolyDesign',
-        avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&h=100&fit=crop&crop=faces',
-        rating: 5,
-        date: '17 февраля 2025',
-        comment: 'Клиентский портал производит вау-эффект на заказчиков. Закрываем чеки от $2k без долгих согласований, потому что всё прозрачно и супер-профессионально.',
-        verified: true
-      }
-    ]
-  }
-];
+    specs: [
+      { label: { ru: 'Вкладки', en: 'Tabs' }, value: { ru: '14', en: '14' } },
+      { label: { ru: 'Горизонт прогноза', en: 'Forecast horizon' }, value: { ru: '60 месяцев', en: '60 months' } },
+      { label: { ru: 'Сценарии', en: 'Scenarios' }, value: { ru: '3', en: '3' } },
+      { label: { ru: 'Руководство', en: 'Guide' }, value: { ru: 'PDF, 28 страниц', en: 'PDF, 28 pages' } },
+    ],
+    faq: [sheetsFaq],
+    price: { amount: 3490, currency: 'RUB' },
+    license: 'commercial',
+    delivery: 'download',
+    version: '4.2',
+    lastUpdated: '2025-01-01',
+    fileSize: '8.4 MB',
+    isFeatured: true,
+    sortOrder: 1,
+  }),
 
-export const PROMO_CODES: PromoCode[] = [
-  {
-    code: 'START2025',
-    discountPercent: 20,
-    description: {
-      ru: 'Скидка 20% на первый заказ для новых пользователей',
-      en: '20% off your first order for new customers'
-    }
-  },
-  {
-    code: 'BIZVIP',
-    discountPercent: 30,
-    description: {
-      ru: 'Скидка 30% на заказы от 5 000 ₽',
-      en: '30% VIP discount on orders above 5,000 ₽'
+  defineProduct({
+    id: 'a1000000-0000-4000-8000-000000000002',
+    slug: 'startup-os-notion-workspace',
+    productType: 'notion-template',
+    title: {
+      ru: 'Startup OS — рабочее пространство Notion',
+      en: 'Startup OS — Notion Workspace',
     },
-    minAmount: 5000
-  },
-  {
-    code: 'FREEDEMO',
-    discountPercent: 100,
+    subtitle: {
+      ru: 'CRM, база знаний, OKR, спринты и онбординг в одной системе',
+      en: 'CRM, wiki, OKRs, sprints and onboarding in one system',
+    },
+    shortDescription: {
+      ru: 'Операционная система компании в Notion: CRM, база знаний, OKR, спринты, финансы и онбординг команды.',
+      en: 'A company operating system in Notion: CRM, wiki, OKRs, sprints, finance and team onboarding.',
+    },
     description: {
-      ru: '100% тест-драйв: мгновенная бесплатная проверка автовыдачи',
-      en: '100% free test drive: instant zero-cost auto-delivery demo'
-    }
-  }
+      ru: 'Единое рабочее пространство вместо разрозненных инструментов. 24 связанные базы данных: задачи по Scrum и Kanban, карточки клиентов и воронка B2B-сделок, квартальные OKR, база знаний с регламентами и дашборд руководителя. Шаблон дублируется в ваш аккаунт Notion и полностью редактируется.',
+      en: 'One workspace instead of scattered tools. 24 linked databases: Scrum and Kanban tasks, client records and a B2B deal pipeline, quarterly OKRs, a wiki with SOPs and an executive dashboard. The template is duplicated into your own Notion account and is fully editable.',
+    },
+    categoryId: 'startup-os',
+    secondaryCategoryIds: ['startup-systems', 'project-management'],
+    goals: ['launch-startup', 'organize-operations', 'manage-team', 'build-saas'],
+    tags: ['Notion', 'Startup OS', 'CRM', 'OKR', 'Wiki', 'Sprints'],
+    formats: ['notion', 'pdf'],
+    software: ['Notion'],
+    audience: {
+      ru: ['Фаундеры и операционные руководители', 'Команды от 2 до 50 человек', 'Компании, переходящие в Notion'],
+      en: ['Founders and operations leads', 'Teams of 2 to 50 people', 'Companies moving to Notion'],
+    },
+    useCases: {
+      ru: ['Запуск операционных процессов новой компании', 'Сведение задач, целей и клиентов в одно место', 'Онбординг новых сотрудников'],
+      en: ['Setting up operations for a new company', 'Bringing tasks, goals and clients into one place', 'Onboarding new hires'],
+    },
+    features: {
+      ru: [
+        'Дашборд основателя: выручка, спринты и ключевые метрики',
+        'B2B CRM со статусами сделок и контактами',
+        'OKR с прогрессом по ключевым результатам',
+        'База регламентов, SOP и онбординга',
+        'Дублирование в личное или командное пространство Notion',
+      ],
+      en: [
+        'Founder dashboard: revenue, sprints and key metrics',
+        'B2B CRM with deal stages and contacts',
+        'OKRs with key-result progress tracking',
+        'Hub for SOPs, procedures and onboarding',
+        'Duplicates into a personal or team Notion workspace',
+      ],
+    },
+    includedItems: {
+      ru: [
+        'Ссылка на дублирование шаблона Notion',
+        'Видео по настройке под ваш бизнес (40 минут)',
+        'Гайд по внедрению регламентов в команде (PDF)',
+        'Набор иконок и обложек для страниц',
+      ],
+      en: [
+        'Notion template duplicate link',
+        'Customization walkthrough video (40 minutes)',
+        'Team SOP rollout guide (PDF)',
+        'Icon and page-cover pack',
+      ],
+    },
+    requirements: {
+      ru: ['Аккаунт Notion', 'Для командной работы — командное пространство Notion'],
+      en: ['A Notion account', 'A Notion team workspace for collaborative use'],
+    },
+    specs: [
+      { label: { ru: 'Базы данных', en: 'Databases' }, value: { ru: '24 связанные', en: '24 linked' } },
+      { label: { ru: 'Страницы и шаблоны', en: 'Pages & templates' }, value: { ru: '45+', en: '45+' } },
+      { label: { ru: 'Видео', en: 'Video' }, value: { ru: '40 минут', en: '40 minutes' } },
+    ],
+    faq: [notionDuplicateFaq],
+    price: { amount: 2990, currency: 'RUB' },
+    license: 'commercial',
+    delivery: 'download-and-link',
+    version: '5.0',
+    lastUpdated: '2025-02-01',
+    fileSize: null,
+    isFeatured: true,
+    sortOrder: 2,
+  }),
+
+  defineProduct({
+    id: 'a1000000-0000-4000-8000-000000000003',
+    slug: 'b2b-cold-outreach-playbook',
+    productType: 'playbook',
+    title: {
+      ru: 'Плейбук B2B-аутрича и Account-Based Marketing',
+      en: 'B2B Cold Outreach & ABM Playbook',
+    },
+    subtitle: {
+      ru: '45 цепочек писем, скрипты для LinkedIn и CRM для лидов',
+      en: '45 email sequences, LinkedIn scripts and a lead CRM',
+    },
+    shortDescription: {
+      ru: '45 цепочек холодных писем для B2B, скрипты для LinkedIn, чек-лист доставляемости и Notion-CRM для лидогенерации.',
+      en: '45 B2B cold email sequences, LinkedIn scripts, a deliverability checklist and a Notion CRM for prospecting.',
+    },
+    description: {
+      ru: 'Система исходящих продаж для B2B: шаблоны писем для разных сегментов, сценарии фоллоу-апов, технический чек-лист настройки почты (SPF, DKIM, DMARC), рекомендации по текстам и трекер лидов в Notion. Шаблоны — отправная точка: результаты зависят от рынка, оффера и базы контактов.',
+      en: 'An outbound sales system for B2B: email templates for different segments, follow-up cadences, a technical mail setup checklist (SPF, DKIM, DMARC), copywriting guidance and a Notion lead tracker. The templates are a starting point — results depend on your market, offer and contact list.',
+    },
+    categoryId: 'outreach',
+    secondaryCategoryIds: ['sales', 'copywriting'],
+    goals: ['improve-sales', 'run-agency'],
+    tags: ['B2B', 'Cold email', 'LinkedIn', 'ABM', 'Deliverability', 'Prompts'],
+    formats: ['pdf', 'notion', 'excel'],
+    software: ['Notion', 'Microsoft Excel', 'Any email client'],
+    audience: {
+      ru: ['Основатели B2B-компаний', 'SDR и менеджеры по продажам', 'Маркетинговые и лидген-агентства'],
+      en: ['B2B founders', 'SDRs and account executives', 'Marketing and lead-gen agencies'],
+    },
+    useCases: {
+      ru: ['Запуск первой кампании холодных писем', 'Настройка домена и почты перед рассылкой', 'Персонализация писем с помощью AI'],
+      en: ['Launching a first cold email campaign', 'Setting up a domain and mailbox before sending', 'Personalizing emails with AI'],
+    },
+    features: {
+      ru: [
+        '45 многошаговых цепочек писем для разных B2B-ниш',
+        'Скрипты первого контакта и фоллоу-апов в LinkedIn',
+        'Чек-лист прогрева домена и настройки SPF/DKIM/DMARC',
+        'Промпты для персонализации писем с помощью языковых моделей',
+      ],
+      en: [
+        '45 multi-step email cadences for different B2B niches',
+        'LinkedIn connection and follow-up message scripts',
+        'Domain warm-up and SPF/DKIM/DMARC setup checklist',
+        'Prompts for personalizing emails with language models',
+      ],
+    },
+    includedItems: {
+      ru: [
+        'Основной плейбук по аутричу (PDF, 84 страницы)',
+        'Сборник цепочек писем (PDF)',
+        'Трекер лидов (ссылка на шаблон Notion)',
+        'Чек-лист аудита доставляемости (.xlsx)',
+      ],
+      en: [
+        'Outreach master playbook (PDF, 84 pages)',
+        'Email sequence copy book (PDF)',
+        'Lead tracker (Notion template link)',
+        'Deliverability audit checklist (.xlsx)',
+      ],
+    },
+    requirements: {
+      ru: ['Корпоративная почта на собственном домене', 'Аккаунт Notion для трекера лидов'],
+      en: ['A business mailbox on your own domain', 'A Notion account for the lead tracker'],
+    },
+    specs: [
+      { label: { ru: 'Цепочки писем', en: 'Email sequences' }, value: { ru: '45', en: '45' } },
+      { label: { ru: 'Плейбук', en: 'Playbook' }, value: { ru: 'PDF, 84 страницы', en: 'PDF, 84 pages' } },
+    ],
+    faq: [],
+    price: { amount: 1990, currency: 'RUB' },
+    license: 'commercial',
+    delivery: 'download-and-link',
+    version: '3.1',
+    lastUpdated: '2025-01-01',
+    fileSize: '14.2 MB',
+    isFeatured: false,
+    sortOrder: 5,
+  }),
+
+  defineProduct({
+    id: 'a1000000-0000-4000-8000-000000000004',
+    slug: 'ecommerce-unit-economics-pnl-cashflow',
+    productType: 'spreadsheet',
+    title: {
+      ru: 'E-commerce и маркетплейсы: юнит-экономика, P&L и ДДС',
+      en: 'E-commerce & Marketplaces: Unit Economics, P&L and Cash Flow',
+    },
+    subtitle: {
+      ru: 'Чистая прибыль по каждому SKU с учётом комиссий, логистики и возвратов',
+      en: 'Net profit per SKU after fees, fulfilment and returns',
+    },
+    shortDescription: {
+      ru: 'Таблица для продавцов на Wildberries, Ozon, Яндекс Маркете и в собственном магазине: комиссии, логистика, реклама, возвраты и денежный поток.',
+      en: 'A spreadsheet for sellers on Wildberries, Ozon, Yandex Market and their own store: fees, fulfilment, ads, returns and cash flow.',
+    },
+    description: {
+      ru: 'Считает реальную чистую прибыль с учётом комиссий маркетплейса, эквайринга, логистики, хранения и процента выкупа. Включает ABC/XYZ-анализ ассортимента, управленческий P&L, бюджет движения денежных средств и калькулятор точки безубыточности для новых товаров. Справочник тарифов отражает ставки на момент выпуска версии — сверяйте их с актуальными условиями площадок.',
+      en: 'Calculates true net profit after marketplace commission, payment processing, fulfilment, storage and buyout rate. Includes ABC/XYZ assortment analysis, a management P&L, a cash flow budget and a break-even calculator for new products. The fee reference reflects rates at the time of the version release — check them against current marketplace terms.',
+    },
+    categoryId: 'unit-economics',
+    secondaryCategoryIds: ['finance', 'analytics'],
+    goals: ['sell-on-marketplaces', 'analyze-unit-economics'],
+    tags: ['E-commerce', 'Wildberries', 'Ozon', 'P&L', 'Cash Flow', 'SKU'],
+    formats: ['excel', 'google-sheets'],
+    software: ['Microsoft Excel', 'Google Sheets'],
+    audience: {
+      ru: ['Селлеры маркетплейсов', 'DTC-бренды и интернет-магазины', 'Финансисты e-commerce'],
+      en: ['Marketplace sellers', 'DTC brands and online stores', 'E-commerce finance teams'],
+    },
+    useCases: {
+      ru: ['Поиск убыточных SKU', 'Расчёт допустимого рекламного бюджета', 'Решение о запуске нового товара'],
+      en: ['Finding unprofitable SKUs', 'Setting a safe ad budget', 'Deciding whether to launch a new product'],
+    },
+    features: {
+      ru: [
+        'Юнит-экономика каждого SKU с учётом процента выкупа',
+        'Управленческий P&L и бюджет движения денежных средств',
+        'ABC/XYZ-анализ товарной матрицы',
+        'Расчёт допустимого рекламного бюджета по марже',
+      ],
+      en: [
+        'Per-SKU unit economics including buyout rate',
+        'Management P&L and cash flow budget',
+        'ABC/XYZ product assortment analysis',
+        'Safe ad budget calculated from margin',
+      ],
+    },
+    includedItems: {
+      ru: [
+        'Модель юнит-экономики для маркетплейсов (.xlsx)',
+        'Ссылка на версию Google Sheets (PDF)',
+        'Видеоинструкция по расчётам (ссылка)',
+        'Справочник тарифов и комиссий (.xlsx)',
+      ],
+      en: [
+        'Marketplace unit economics model (.xlsx)',
+        'Google Sheets version link (PDF)',
+        'Calculation walkthrough video (link)',
+        'Fee and commission reference (.xlsx)',
+      ],
+    },
+    requirements: {
+      ru: ['Microsoft Excel или Google Sheets', 'Выгрузка продаж и расходов с ваших площадок'],
+      en: ['Microsoft Excel or Google Sheets', 'Sales and cost exports from your sales channels'],
+    },
+    specs: [
+      { label: { ru: 'Вкладки', en: 'Tabs' }, value: { ru: '11 связанных', en: '11 linked' } },
+      { label: { ru: 'Анализы', en: 'Analyses' }, value: { ru: 'ABC/XYZ, точка безубыточности', en: 'ABC/XYZ, break-even' } },
+    ],
+    faq: [sheetsFaq],
+    price: { amount: 2490, currency: 'RUB' },
+    license: 'commercial',
+    delivery: 'download',
+    version: '3.8',
+    lastUpdated: '2025-02-01',
+    fileSize: '6.7 MB',
+    isFeatured: false,
+    sortOrder: 4,
+  }),
+
+  defineProduct({
+    id: 'a1000000-0000-4000-8000-000000000005',
+    slug: 'product-manager-playbook',
+    productType: 'notion-template',
+    title: {
+      ru: 'Плейбук продакт-менеджера (Notion + PDF)',
+      en: 'Product Manager Playbook (Notion + PDF)',
+    },
+    subtitle: {
+      ru: 'PRD, CustDev, дерево метрик и приоритизация RICE/ICE',
+      en: 'PRDs, customer discovery, metric trees and RICE/ICE scoring',
+    },
+    shortDescription: {
+      ru: 'Инструментарий продакт-менеджера: шаблоны PRD, гайды для CustDev-интервью, дерево North Star Metric и фреймворки приоритизации RICE, ICE и Kano.',
+      en: 'A product manager’s toolkit: PRD templates, customer interview guides, a North Star Metric tree and RICE, ICE and Kano prioritization frameworks.',
+    },
+    description: {
+      ru: 'Практическая библиотека артефактов для управления продуктом: шаблоны документации, сценарии интервью для проверки гипотез, калькуляторы приоритизации и карта метрик. Подходит как для одного продакта, так и для продуктовой команды.',
+      en: 'A practical library of product management artifacts: documentation templates, interview scripts for validating hypotheses, prioritization calculators and a metrics map. Works for a single PM or a whole product team.',
+    },
+    categoryId: 'prd',
+    secondaryCategoryIds: ['research', 'strategy', 'productivity'],
+    goals: ['build-product', 'build-saas'],
+    tags: ['Product', 'PRD', 'CustDev', 'North Star', 'RICE', 'Kano'],
+    formats: ['notion', 'pdf'],
+    software: ['Notion'],
+    audience: {
+      ru: ['Продакт-менеджеры и CPO', 'Фаундеры, которые сами ведут продукт', 'Продуктовые команды'],
+      en: ['Product managers and CPOs', 'Founders who run product themselves', 'Product teams'],
+    },
+    useCases: {
+      ru: ['Написание PRD для новой функции', 'Проведение интервью с клиентами', 'Приоритизация бэклога'],
+      en: ['Writing a PRD for a new feature', 'Running customer interviews', 'Prioritizing the backlog'],
+    },
+    features: {
+      ru: [
+        'Шаблоны PRD (Product Requirements Document)',
+        'Сценарии CustDev-интервью и трекер инсайтов',
+        'Калькулятор приоритизации RICE и ICE, разбор модели Kano',
+        'Дерево метрик North Star Metric',
+      ],
+      en: [
+        'Product Requirements Document (PRD) templates',
+        'Customer interview scripts and an insights tracker',
+        'RICE and ICE scoring calculator, Kano model guide',
+        'North Star Metric tree',
+      ],
+    },
+    includedItems: {
+      ru: [
+        'Ссылка на дублирование рабочего пространства Notion',
+        'Справочник вопросов для CustDev-интервью (PDF, 42 страницы)',
+        'Шпаргалки по Product Discovery (PDF)',
+        'Шпаргалка по user flow и дизайн-токенам (PDF)',
+      ],
+      en: [
+        'Notion workspace duplicate link',
+        'Customer interview question handbook (PDF, 42 pages)',
+        'Product discovery cheat sheets (PDF)',
+        'User flow and design token cheat sheet (PDF)',
+      ],
+    },
+    requirements: {
+      ru: ['Аккаунт Notion'],
+      en: ['A Notion account'],
+    },
+    specs: [
+      { label: { ru: 'Базы данных', en: 'Databases' }, value: { ru: '18', en: '18' } },
+      { label: { ru: 'Шаблоны', en: 'Templates' }, value: { ru: '35', en: '35' } },
+      { label: { ru: 'Справочник интервью', en: 'Interview handbook' }, value: { ru: 'PDF, 42 страницы', en: 'PDF, 42 pages' } },
+    ],
+    faq: [notionDuplicateFaq],
+    price: { amount: 2790, currency: 'RUB' },
+    license: 'commercial',
+    delivery: 'download-and-link',
+    version: '4.0',
+    lastUpdated: '2025-01-01',
+    fileSize: null,
+    isFeatured: false,
+    sortOrder: 6,
+  }),
+
+  defineProduct({
+    id: 'a1000000-0000-4000-8000-000000000006',
+    slug: 'venture-pitch-deck-kit',
+    productType: 'presentation',
+    title: {
+      ru: 'Набор для питч-дека и инвестиционных материалов',
+      en: 'Venture Pitch Deck Kit',
+    },
+    subtitle: {
+      ru: '120+ слайдов для PowerPoint, Keynote и Google Slides + дата-рум в Notion',
+      en: '120+ slides for PowerPoint, Keynote and Google Slides + a Notion data room',
+    },
+    shortDescription: {
+      ru: 'Более 120 редактируемых слайдов для привлечения инвестиций в PowerPoint, Keynote и Google Slides, а также шаблон дата-рума в Notion.',
+      en: 'More than 120 editable fundraising slides for PowerPoint, Keynote and Google Slides, plus a Notion data room template.',
+    },
+    description: {
+      ru: 'Конструктор презентации для раундов Pre-Seed, Seed и Series A. Слайды следуют привычной для инвесторов структуре: проблема, решение, рынок TAM/SAM/SOM, бизнес-модель, тракшн, команда. В комплекте тёмная и светлая темы, инфографика, шаблон виртуального дата-рума в Notion и гайд по подготовке к встречам с инвесторами.',
+      en: 'A deck builder for Pre-Seed, Seed and Series A rounds. Slides follow the structure investors expect: problem, solution, TAM/SAM/SOM, business model, traction and team. Includes dark and light themes, infographics, a Notion virtual data room template and a guide to preparing for investor meetings.',
+    },
+    categoryId: 'pitch-decks',
+    secondaryCategoryIds: ['powerpoint', 'keynote', 'google-slides', 'startup-systems'],
+    goals: ['prepare-investors', 'launch-startup'],
+    tags: ['Pitch deck', 'Fundraising', 'Keynote', 'PowerPoint', 'Data room'],
+    formats: ['powerpoint', 'keynote', 'google-slides', 'notion', 'pdf'],
+    software: ['PowerPoint', 'Keynote', 'Google Slides', 'Notion'],
+    audience: {
+      ru: ['Фаундеры перед раундом', 'Акселерационные программы', 'Команды, готовящие демо-день'],
+      en: ['Founders before a round', 'Accelerator cohorts', 'Teams preparing for demo day'],
+    },
+    useCases: {
+      ru: ['Сборка питч-дека с нуля', 'Подготовка дата-рума для due diligence', 'Отработка ответов на вопросы инвесторов'],
+      en: ['Building a pitch deck from scratch', 'Preparing a data room for due diligence', 'Rehearsing answers to investor questions'],
+    },
+    features: {
+      ru: [
+        'Более 120 мастер-слайдов в тёмной и светлой темах',
+        'Структуры слайдов: проблема, решение, рынок, бизнес-модель, команда, тракшн',
+        'Шаблон виртуального дата-рума в Notion',
+        'Гайд по подготовке к встречам и ответам на вопросы инвесторов',
+      ],
+      en: [
+        '120+ master slides in dark and light themes',
+        'Slide structures: problem, solution, market, business model, team, traction',
+        'Notion virtual data room template',
+        'Guide to preparing for investor meetings and questions',
+      ],
+    },
+    includedItems: {
+      ru: [
+        'Питч-дек для PowerPoint (.pptx)',
+        'Питч-дек для Keynote (.key)',
+        'Ссылка на копию в Google Slides (PDF)',
+        'Шаблон дата-рума в Notion (ссылка)',
+        'Гайд по подготовке к раунду (PDF, 32 страницы)',
+      ],
+      en: [
+        'PowerPoint pitch deck (.pptx)',
+        'Keynote pitch deck (.key)',
+        'Google Slides copy link (PDF)',
+        'Notion data room template (link)',
+        'Fundraising preparation guide (PDF, 32 pages)',
+      ],
+    },
+    requirements: {
+      ru: ['PowerPoint, Keynote или Google Slides', 'Аккаунт Notion для дата-рума'],
+      en: ['PowerPoint, Keynote or Google Slides', 'A Notion account for the data room'],
+    },
+    specs: [
+      { label: { ru: 'Слайды', en: 'Slides' }, value: { ru: '120+', en: '120+' } },
+      { label: { ru: 'Темы', en: 'Themes' }, value: { ru: 'Тёмная и светлая', en: 'Dark and light' } },
+      { label: { ru: 'Гайд', en: 'Guide' }, value: { ru: 'PDF, 32 страницы', en: 'PDF, 32 pages' } },
+    ],
+    faq: [
+      {
+        question: { ru: 'Можно ли менять шрифты и цвета?', en: 'Can I change fonts and colours?' },
+        answer: {
+          ru: 'Да. Все слайды редактируются: тексты, цвета, графики и расположение элементов.',
+          en: 'Yes. Every slide is editable: text, colours, charts and layout.',
+        },
+      },
+    ],
+    price: { amount: 3890, currency: 'RUB' },
+    license: 'commercial',
+    delivery: 'download-and-link',
+    version: '4.5',
+    lastUpdated: '2025-02-01',
+    fileSize: '142 MB',
+    isFeatured: true,
+    sortOrder: 3,
+  }),
+
+  defineProduct({
+    id: 'a1000000-0000-4000-8000-000000000007',
+    slug: 'hr-team-scaling-system',
+    productType: 'notion-template',
+    title: {
+      ru: 'HR-система для роста команды: найм, онбординг и оценка',
+      en: 'HR & Team Scaling System: Hiring, Onboarding & Reviews',
+    },
+    subtitle: {
+      ru: 'ATS в Notion, скоринг-карты, план 30-60-90 и Review 360',
+      en: 'A Notion ATS, interview scorecards, 30-60-90 plans and 360 reviews',
+    },
+    shortDescription: {
+      ru: 'Воронка найма (ATS) в Notion, скоринг-карты собеседований, планы адаптации на 30-60-90 дней и Performance Review 360.',
+      en: 'A Notion applicant tracking system, interview scorecards, 30-60-90 day onboarding plans and 360 performance reviews.',
+    },
+    description: {
+      ru: 'Система управления персоналом для растущих компаний. Помогает выстроить путь сотрудника: профиль вакансии, структурированные интервью, онбординг в первые недели и регулярная оценка результатов по методике 360 градусов.',
+      en: 'A people-management system for growing companies. It structures the employee journey: role profiles, structured interviews, onboarding in the first weeks and regular 360-degree performance reviews.',
+    },
+    categoryId: 'operations',
+    secondaryCategoryIds: ['project-management', 'productivity'],
+    goals: ['manage-team', 'organize-operations', 'launch-startup'],
+    tags: ['HR', 'Hiring', 'ATS', 'Onboarding', 'Performance review', 'Notion'],
+    formats: ['notion', 'pdf', 'word', 'excel'],
+    software: ['Notion', 'Microsoft Word', 'Microsoft Excel'],
+    audience: {
+      ru: ['Фаундеры, которые сами нанимают', 'HR и People-команды', 'Руководители растущих отделов'],
+      en: ['Founders who hire themselves', 'HR and People teams', 'Managers of growing teams'],
+    },
+    useCases: {
+      ru: ['Организация воронки кандидатов', 'Единые критерии оценки на собеседованиях', 'Онбординг и ревью сотрудников'],
+      en: ['Organizing a candidate pipeline', 'Consistent interview evaluation criteria', 'Onboarding and employee reviews'],
+    },
+    features: {
+      ru: [
+        'ATS в Notion с этапами воронки кандидатов',
+        'Скоринг-карты для оценки hard и soft skills',
+        'Чек-листы онбординга на 30-60-90 дней',
+        'Шаблон и методика Performance Review 360°',
+      ],
+      en: [
+        'Notion ATS with candidate pipeline stages',
+        'Scorecards for evaluating hard and soft skills',
+        '30-60-90 day onboarding checklists',
+        '360° performance review template and method',
+      ],
+    },
+    includedItems: {
+      ru: [
+        'Ссылка на дублирование рабочего пространства Notion',
+        'Описания 50 технических вакансий (PDF)',
+        'Шаблон handbook для сотрудников (.docx)',
+        'Рубрика оценки на интервью (.xlsx)',
+      ],
+      en: [
+        'Notion workspace duplicate link',
+        '50 tech role job descriptions (PDF)',
+        'Employee handbook starter template (.docx)',
+        'Interview scorecard rubric (.xlsx)',
+      ],
+    },
+    requirements: {
+      ru: ['Аккаунт Notion', 'Microsoft Word и Excel (или совместимые редакторы)'],
+      en: ['A Notion account', 'Microsoft Word and Excel (or compatible editors)'],
+    },
+    specs: [
+      { label: { ru: 'Базы данных', en: 'Databases' }, value: { ru: '12', en: '12' } },
+      { label: { ru: 'Документы', en: 'Documents' }, value: { ru: '28', en: '28' } },
+      { label: { ru: 'Описания вакансий', en: 'Job descriptions' }, value: { ru: '50', en: '50' } },
+    ],
+    faq: [notionDuplicateFaq],
+    price: { amount: 2190, currency: 'RUB' },
+    license: 'commercial',
+    delivery: 'download-and-link',
+    version: '2.6',
+    lastUpdated: '2025-01-01',
+    fileSize: null,
+    isFeatured: false,
+    sortOrder: 7,
+  }),
+
+  defineProduct({
+    id: 'a1000000-0000-4000-8000-000000000008',
+    slug: 'freelance-agency-os',
+    productType: 'notion-template',
+    title: {
+      ru: 'Freelance & Agency OS: клиенты, договоры, счета и CRM',
+      en: 'Freelance & Agency OS: Clients, Contracts, Invoicing & CRM',
+    },
+    subtitle: {
+      ru: 'Клиентский портал, КП, учёт времени и рентабельность проектов',
+      en: 'Client portal, proposals, time tracking and project profitability',
+    },
+    shortDescription: {
+      ru: 'Процессы фрилансера и агентства в одной системе: клиентский портал, коммерческие предложения, учёт времени, шаблоны договоров и брифы.',
+      en: 'Freelancer and agency operations in one system: client portal, proposals, time tracking, contract templates and briefs.',
+    },
+    description: {
+      ru: 'Решение для фрилансеров, студий и консалтинговых агентств. Объединяет клиентский портал в Notion, шаблоны коммерческих предложений, калькулятор рентабельности проектов в Excel, шаблоны договоров, SOW и NDA. Юридические шаблоны — отправная точка: адаптируйте их под вашу юрисдикцию вместе с юристом.',
+      en: 'For freelancers, studios and consultancies. Combines a Notion client portal, proposal templates, an Excel project profitability calculator and contract, SOW and NDA templates. The legal templates are a starting point — adapt them to your jurisdiction with a lawyer.',
+    },
+    categoryId: 'crm',
+    secondaryCategoryIds: ['notion-crm', 'operations'],
+    goals: ['run-agency', 'improve-sales', 'organize-operations'],
+    tags: ['Agency', 'Freelance', 'CRM', 'Proposals', 'Contracts', 'Notion'],
+    formats: ['notion', 'excel', 'word', 'pdf'],
+    software: ['Notion', 'Microsoft Excel', 'Microsoft Word'],
+    audience: {
+      ru: ['Фрилансеры и независимые специалисты', 'Дизайн- и digital-студии', 'Консалтинговые агентства'],
+      en: ['Freelancers and independent specialists', 'Design and digital studios', 'Consultancies'],
+    },
+    useCases: {
+      ru: ['Ведение клиентов и проектов в одном месте', 'Подготовка коммерческих предложений', 'Расчёт ставки и рентабельности'],
+      en: ['Managing clients and projects in one place', 'Preparing proposals', 'Calculating rates and profitability'],
+    },
+    features: {
+      ru: [
+        'Клиентский портал в Notion, которым можно поделиться по ссылке',
+        'Шаблоны коммерческих предложений и Scope of Work',
+        'Шаблоны договоров, актов и NDA',
+        'Калькулятор почасовой ставки и рентабельности проектов',
+      ],
+      en: [
+        'Shareable Notion client portal',
+        'Proposal and scope of work templates',
+        'Contract, statement of work and NDA templates',
+        'Hourly rate and project profitability calculator',
+      ],
+    },
+    includedItems: {
+      ru: [
+        'Ссылка на дублирование рабочего пространства Notion',
+        'Шаблоны договоров и актов (Word и PDF)',
+        'Калькулятор рентабельности проектов (.xlsx)',
+        'Шаблоны брифов для клиентов (PDF)',
+      ],
+      en: [
+        'Notion workspace duplicate link',
+        'Contract and statement of work templates (Word & PDF)',
+        'Project profitability calculator (.xlsx)',
+        'Client intake brief templates (PDF)',
+      ],
+    },
+    requirements: {
+      ru: ['Аккаунт Notion', 'Microsoft Excel и Word (или совместимые редакторы)'],
+      en: ['A Notion account', 'Microsoft Excel and Word (or compatible editors)'],
+    },
+    specs: [
+      { label: { ru: 'Шаблоны и базы', en: 'Templates & databases' }, value: { ru: '22', en: '22' } },
+    ],
+    faq: [notionDuplicateFaq],
+    price: { amount: 1890, currency: 'RUB' },
+    license: 'commercial',
+    delivery: 'download-and-link',
+    version: '3.2',
+    lastUpdated: '2025-02-01',
+    fileSize: '19.8 MB',
+    isFeatured: false,
+    sortOrder: 8,
+  }),
 ];

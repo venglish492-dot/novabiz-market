@@ -1,52 +1,122 @@
-import { NextRequest, NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+import { getSessionUser } from '@/lib/auth/session';
+import { getSupabaseAdmin } from '@/lib/supabase/admin';
+import { serverConfig } from '@/lib/config/server';
+import { rateLimit } from '@/lib/rate-limit';
+import { logger } from '@/lib/logger';
+import { uuidSchema } from '@/lib/validation/schemas';
+
+/**
+ * Secure delivery of purchased files.
+ *
+ *   GET /api/download?file=<product_file_id>
+ *
+ * 1. Requires a verified session (no anonymous or token-in-URL access).
+ * 2. Resolves the file server-side; the client never supplies a storage path.
+ * 3. Requires an unrevoked entitlement for the file's product owned by the caller.
+ * 4. Applies per-user rate and daily limits.
+ * 5. Issues a short-lived signed URL for the private bucket and redirects to it.
+ * Every attempt is logged (without IP addresses).
+ */
+
+const NO_STORE = { 'Cache-Control': 'no-store, max-age=0', 'Referrer-Policy': 'no-referrer' };
+
+function json(status: number, error: string, extraHeaders: Record<string, string> = {}) {
+  return Response.json({ error }, { status, headers: { ...NO_STORE, ...extraHeaders } });
+}
 
 export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const orderId = searchParams.get('orderId') || 'ORD-DIRECT';
-  const productId = searchParams.get('productId') || 'ASSET-PACK';
+  const user = await getSessionUser();
+  if (!user) return json(401, 'unauthorized');
 
-  const manifest = `================================================================================
-VECTORLAB ASSETS — OFFICIAL CRYPTOGRAPHIC DIGITAL ASSET PACKAGE
-================================================================================
+  // `mode=json` lets the library UI handle errors gracefully instead of navigating.
+  const asJson = request.nextUrl.searchParams.get('mode') === 'json';
+  const deliver = (location: string) =>
+    asJson
+      ? Response.json({ url: location }, { headers: NO_STORE })
+      : new Response(null, { status: 302, headers: { ...NO_STORE, Location: location } });
 
-ORDER IDENTIFIER: ${orderId}
-PRODUCT ID: ${productId}
-TIMESTAMP: ${new Date().toISOString()}
-CRYPTOGRAPHIC HASH: SHA256-${Buffer.from(orderId + productId + Date.now()).toString('base64').substring(0, 32)}
-LICENSE: Single-User Unlimited Business License (Commercial Rights Included)
+  const parsed = uuidSchema.safeParse(request.nextUrl.searchParams.get('file'));
+  if (!parsed.success) return json(400, 'invalid_file');
+  const fileId = parsed.data;
 
---------------------------------------------------------------------------------
-1. NOTION CLOUD WORKSPACES & TEMPLATES:
---------------------------------------------------------------------------------
-To duplicate this Notion asset into your personal or team workspace:
-1. Open URL: https://notion.site/vectorlab-template-duplicate-hub
-2. Click "Duplicate" in top right corner.
-3. Select your destination workspace.
+  const admin = getSupabaseAdmin();
+  if (!admin) return json(503, 'unavailable');
 
---------------------------------------------------------------------------------
-2. EXCEL & GOOGLE SHEETS ASSETS:
---------------------------------------------------------------------------------
-- Formulas, financial projections, and VBA macros are 100% unlocked.
-- Compatible with: Microsoft Excel 2019+, Office 365, Google Sheets, Apple Numbers.
+  const burst = rateLimit(`download:${user.id}`, 20, 60_000);
+  if (!burst.ok) return json(429, 'rate_limited', { 'Retry-After': String(burst.retryAfterSeconds) });
 
---------------------------------------------------------------------------------
-3. COMMERCIAL USE & ANTI-PIRACY PROTECTION:
---------------------------------------------------------------------------------
-- This digital document is watermarked and registered to your order ID.
-- You are licensed to use, adapt, and deploy these materials in internal operations
-  and client projects without restriction.
-- Reselling or public redistribution of the raw source files is strictly prohibited.
+  const userAgent = request.headers.get('user-agent')?.slice(0, 300) ?? null;
+  const log = (status: 'success' | 'denied' | 'error', extra: { productId?: string; orderId?: string | null; reason?: string }) =>
+    admin.from('downloads').insert({
+      user_id: user.id,
+      product_id: extra.productId ?? null,
+      file_id: status === 'success' || extra.productId ? fileId : null,
+      order_id: extra.orderId ?? null,
+      status,
+      reason: extra.reason ?? null,
+      user_agent: userAgent,
+    });
 
-================================================================================
-AUTOPILOT FILE CLUSTER: Node-EU-Central-1 • Status: VERIFIED 200 OK
-Technical Support: support@novabiz-assets.pro
-================================================================================`;
+  const { data: file } = await admin
+    .from('product_files')
+    .select('id, product_id, kind, storage_path, external_url, file_name')
+    .eq('id', fileId)
+    .maybeSingle();
+  if (!file) {
+    await log('denied', { reason: 'file_not_found' });
+    return json(404, 'not_found');
+  }
 
-  return new NextResponse(manifest, {
-    status: 200,
-    headers: {
-      'Content-Type': 'text/plain; charset=utf-8',
-      'Content-Disposition': `attachment; filename="VectorLab_${orderId}_Package.txt"`
-    }
-  });
+  const { data: entitlement } = await admin
+    .from('entitlements')
+    .select('order_id')
+    .eq('user_id', user.id)
+    .eq('product_id', file.product_id)
+    .is('revoked_at', null)
+    .order('granted_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (!entitlement) {
+    await log('denied', { productId: file.product_id, reason: 'not_owner' });
+    logger.warn('download.denied', { userId: user.id, fileId });
+    return json(403, 'forbidden');
+  }
+
+  const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+  const { count } = await admin
+    .from('downloads')
+    .select('id', { count: 'exact', head: true })
+    .eq('user_id', user.id)
+    .eq('product_id', file.product_id)
+    .eq('status', 'success')
+    .gte('created_at', since);
+  if ((count ?? 0) >= serverConfig.storage.dailyDownloadLimit) {
+    await log('denied', { productId: file.product_id, orderId: entitlement.order_id, reason: 'daily_limit' });
+    return json(429, 'daily_limit');
+  }
+
+  if (file.kind === 'external_link' && file.external_url) {
+    await log('success', { productId: file.product_id, orderId: entitlement.order_id });
+    return deliver(file.external_url);
+  }
+
+  if (!file.storage_path) {
+    await log('error', { productId: file.product_id, orderId: entitlement.order_id, reason: 'missing_path' });
+    return json(404, 'not_found');
+  }
+
+  const { data: signed, error } = await admin.storage
+    .from(serverConfig.storage.filesBucket)
+    .createSignedUrl(file.storage_path, serverConfig.storage.downloadUrlTtlSeconds, {
+      download: file.file_name || true,
+    });
+  if (error || !signed?.signedUrl) {
+    await log('error', { productId: file.product_id, orderId: entitlement.order_id, reason: 'sign_failed' });
+    logger.error('download.sign_failed', { fileId, message: error?.message });
+    return json(502, 'unavailable');
+  }
+
+  await log('success', { productId: file.product_id, orderId: entitlement.order_id });
+  return deliver(signed.signedUrl);
 }
