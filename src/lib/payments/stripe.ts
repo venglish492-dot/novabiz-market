@@ -13,16 +13,24 @@ const STRIPE_API = 'https://api.stripe.com/v1';
  * Card data is entered on Stripe's hosted page and never reaches this server.
  */
 async function stripeRequest(path: string, params: URLSearchParams, idempotencyKey?: string) {
-  const response = await fetch(`${STRIPE_API}${path}`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${serverConfig.stripe.secretKey}`,
-      'Content-Type': 'application/x-www-form-urlencoded',
-      ...(idempotencyKey ? { 'Idempotency-Key': idempotencyKey } : {}),
-    },
-    body: params,
-    cache: 'no-store',
-  });
+  let response: Response;
+  try {
+    response = await fetch(`${STRIPE_API}${path}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${serverConfig.stripe.secretKey}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+        ...(idempotencyKey ? { 'Idempotency-Key': idempotencyKey } : {}),
+      },
+      body: params,
+      cache: 'no-store',
+      signal: AbortSignal.timeout(15_000),
+    });
+  } catch (error) {
+    // Network failure or timeout: report it as a provider problem, not a generic error.
+    logger.error('stripe.request_unreachable', { path, error });
+    throw new PaymentProviderError('Stripe is unreachable', 'stripe');
+  }
   const body = (await response.json().catch(() => ({}))) as Record<string, unknown>;
   if (!response.ok) {
     const error = (body.error ?? {}) as Record<string, unknown>;
