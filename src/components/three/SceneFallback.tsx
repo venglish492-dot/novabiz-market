@@ -8,6 +8,7 @@ export function SceneFallback({ className = '' }: { className?: string }) {
   return (
     <div
       aria-hidden
+      data-scene-fallback
       className={`pointer-events-none absolute inset-0 flex items-center justify-center [perspective:1100px] ${className}`}
     >
       <div className="relative h-[70%] w-[70%] [transform-style:preserve-3d] [transform:rotateX(58deg)_rotateZ(-32deg)]">

@@ -32,11 +32,25 @@ export function PurchasePanel({ product }: { product: ProductSummary }) {
   useEffect(() => {
     const node = panelRef.current;
     if (!node) return;
-    const observer = new IntersectionObserver(([entry]) => setPanelVisible(entry.isIntersecting || entry.boundingClientRect.top > 0), {
-      threshold: 0,
-    });
-    observer.observe(node);
-    return () => observer.disconnect();
+    // A scroll check rather than IntersectionObserver: anchor jumps can move the
+    // panel from below to above the viewport without ever intersecting it, and
+    // the observer would then never report the change.
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      setPanelVisible(node.getBoundingClientRect().bottom > 0);
+    };
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    schedule();
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', schedule);
+      window.removeEventListener('resize', schedule);
+    };
   }, []);
 
   const buyNow = () => {
@@ -100,6 +114,7 @@ export function PurchasePanel({ product }: { product: ProductSummary }) {
 
       {/* Mobile sticky purchase bar, shown once the main panel scrolls away. */}
       <div
+        data-sticky-buy
         className={`fixed inset-x-0 bottom-0 z-30 border-t border-line glass px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 transition-transform duration-300 lg:hidden ${
           panelVisible ? 'translate-y-full' : 'translate-y-0'
         }`}

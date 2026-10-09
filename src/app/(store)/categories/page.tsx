@@ -35,18 +35,18 @@ export default async function CategoriesPage() {
         crumbLabel={t.product.breadcrumb}
       />
       <div className="container-page py-12 lg:py-16">
-        <ul className="grid gap-4 md:grid-cols-2">
+        <ul className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {populated.map((root) => {
             const children = root.children.filter((child) => (counts.get(child.id) ?? 0) > 0);
             return (
               <li key={root.id} className="flex flex-col rounded-2xl border border-line bg-surface p-6 sm:p-7" style={{ '--tone': `var(--tone-${root.tone})` } as React.CSSProperties}>
-                <div className="flex items-center justify-between gap-4">
-                  <Link href={`/categories/${root.slug}`} className="group flex items-center gap-3 text-2xl font-semibold tracking-tight text-fg">
-                    <span className="h-2 w-2 rounded-full bg-[var(--tone)]" aria-hidden />
-                    {pick(root.name, locale)}
-                    <ArrowUpRight className="h-5 w-5 text-fg-subtle transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-fg" aria-hidden />
+                <div className="flex items-start justify-between gap-3">
+                  <Link href={`/categories/${root.slug}`} className="group flex min-w-0 items-center gap-3 text-xl font-semibold tracking-tight text-fg sm:text-2xl">
+                    <span className="h-2 w-2 shrink-0 rounded-full bg-[var(--tone)]" aria-hidden />
+                    <span className="min-w-0 break-words">{pick(root.name, locale)}</span>
+                    <ArrowUpRight className="h-5 w-5 shrink-0 text-fg-subtle transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-fg" aria-hidden />
                   </Link>
-                  <span className="t-mono text-xs text-fg-subtle">{plural(t.common.products, counts.get(root.id) ?? 0, locale)}</span>
+                  <span className="t-mono shrink-0 whitespace-nowrap pt-1.5 text-xs text-fg-subtle">{plural(t.common.products, counts.get(root.id) ?? 0, locale)}</span>
                 </div>
                 <p className="mt-3 text-sm leading-relaxed text-fg-muted">{pick(root.description, locale)}</p>
                 {children.length > 0 && (
@@ -78,7 +78,7 @@ export default async function CategoriesPage() {
               {t.catalog.roadmapTitle}
             </h2>
             <p className="mt-2 max-w-xl text-sm text-fg-muted">{t.catalog.roadmapBody}</p>
-            <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <ul className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {roadmap.map((root) => (
                 <li key={root.id} className="rounded-2xl border border-dashed border-line-strong p-5">
                   <p className="flex items-center gap-2 font-medium text-fg">

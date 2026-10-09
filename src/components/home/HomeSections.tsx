@@ -79,7 +79,7 @@ export function FeaturedProduct({ t, locale, content, product }: Base & { produc
 
               <div className="mt-auto flex flex-col gap-5 border-t border-line pt-7 sm:flex-row sm:items-center sm:justify-between lg:mt-10">
                 <Price price={product.price} compareAtAmount={product.compareAtAmount} locale={locale} size="lg" compareLabel={t.product.compareAt} />
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                   <AddToCartButton product={product} size="md" variant="secondary" />
                   <ButtonLink href={`/products/${product.slug}`} size="md">
                     {content.featured.cta}

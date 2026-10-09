@@ -23,8 +23,10 @@ export interface NavData {
   collections: Array<{ slug: string; title: LocalizedText }>;
 }
 
-const iconButton =
-  'relative inline-flex h-10 w-10 items-center justify-center rounded-full text-fg-muted transition-colors hover:bg-surface-2 hover:text-fg';
+/** Display is set separately so responsive `hidden`/`sm:inline-flex` variants don't conflict. */
+const iconButtonBase =
+  'relative h-10 w-10 items-center justify-center rounded-full text-fg-muted transition-colors hover:bg-surface-2 hover:text-fg';
+const iconButton = `inline-flex ${iconButtonBase}`;
 
 function subscribeScroll(onChange: () => void) {
   window.addEventListener('scroll', onChange, { passive: true });
@@ -128,11 +130,11 @@ export function SiteHeader({ nav }: { nav: NavData }) {
             <span className="flex-1 truncate">{t.nav.searchPlaceholder}</span>
             <kbd className="t-mono rounded-md border border-line px-1.5 py-0.5 text-[10px] text-fg-subtle">⌘K</kbd>
           </button>
-          <button type="button" onClick={openPalette} className={`${iconButton} xl:hidden`} aria-label={t.nav.search}>
+          <button type="button" onClick={openPalette} className={`${iconButtonBase} inline-flex xl:hidden`} aria-label={t.nav.search}>
             <Search className="h-[18px] w-[18px]" aria-hidden />
           </button>
 
-          <Link href="/wishlist" className={`${iconButton} hidden sm:inline-flex`} aria-label={`${t.nav.wishlist} (${wishlist.count})`}>
+          <Link href="/wishlist" className={`${iconButtonBase} hidden sm:inline-flex`} aria-label={`${t.nav.wishlist} (${wishlist.count})`}>
             <Heart className="h-[18px] w-[18px]" aria-hidden />
             {wishlist.count > 0 && (
               <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-accent" aria-hidden />
@@ -216,16 +218,18 @@ export function SiteHeader({ nav }: { nav: NavData }) {
             </div>
           ) : (
             accountsEnabled && (
-              <Link href="/login" className={buttonClasses({ variant: 'secondary', size: 'sm', className: 'ml-1 hidden sm:inline-flex' })}>
-                {t.nav.signIn}
-              </Link>
+              <div className="ml-1 hidden sm:block">
+                <Link href="/login" className={buttonClasses({ variant: 'secondary', size: 'sm' })}>
+                  {t.nav.signIn}
+                </Link>
+              </div>
             )
           )}
 
           <button
             type="button"
             onClick={() => setMobileOpen(true)}
-            className={`${iconButton} lg:hidden`}
+            className={`${iconButtonBase} inline-flex lg:hidden`}
             aria-label={t.nav.openMenu}
             aria-expanded={mobileOpen}
           >

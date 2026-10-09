@@ -32,5 +32,5 @@ export const FORMATS: Record<FormatId, FormatDefinition> = {
 export const FORMAT_IDS = Object.keys(FORMATS) as FormatId[];
 
 export function isFormatId(value: string): value is FormatId {
-  return value in FORMATS;
+  return Object.hasOwn(FORMATS, value);
 }

@@ -34,7 +34,11 @@ export function ProductCard({
   const badgeLabels = { new: t.common.badgeNew, updated: t.common.badgeUpdated, featured: t.common.badgeFeatured } as const;
 
   return (
-    <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-surface transition-[border-color,transform,box-shadow] duration-300 ease-[var(--ease-out-expo)] hover:-translate-y-0.5 hover:border-line-strong hover:shadow-md">
+    <article
+      data-product-card
+      data-price={product.price.amount}
+      className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-surface transition-[border-color,transform,box-shadow] duration-300 ease-[var(--ease-out-expo)] hover:-translate-y-0.5 hover:border-line-strong hover:shadow-md"
+    >
       <Link href={href} tabIndex={-1} aria-hidden className="relative block aspect-[4/3] overflow-hidden border-b border-line">
         {product.thumbnail ? (
           <Image

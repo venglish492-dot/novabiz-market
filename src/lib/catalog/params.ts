@@ -34,7 +34,7 @@ export function parseCatalogParams(params: RawParams, categories: Category[]): C
   const goal = first(params.goal);
   const license = first(params.license);
   const sort = first(params.sort);
-  const formats = all(params.format).filter((f): f is FormatId => f in FORMATS);
+  const formats = all(params.format).filter((f): f is FormatId => Object.hasOwn(FORMATS, f));
 
   return {
     query: (first(params.q) ?? '').slice(0, 100),

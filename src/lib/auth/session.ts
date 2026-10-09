@@ -60,10 +60,4 @@ export async function requireStaff(nextPath = '/admin'): Promise<SessionUser> {
   return user;
 }
 
-/** Validate a post-login redirect target: same-origin relative paths only. */
-export function safeNextPath(value: unknown, fallback = '/account'): string {
-  if (typeof value !== 'string') return fallback;
-  if (!value.startsWith('/') || value.startsWith('//') || value.startsWith('/\\')) return fallback;
-  if (value.startsWith('/api/')) return fallback;
-  return value;
-}
+export { safeNextPath } from './redirect';
