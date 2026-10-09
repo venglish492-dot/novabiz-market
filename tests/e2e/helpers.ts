@@ -36,7 +36,8 @@ export async function expectNoHorizontalOverflow(page: Page, label = '') {
     for (const element of Array.from(document.querySelectorAll('body *'))) {
       const rect = element.getBoundingClientRect();
       if (!rect.width || !rect.height || rect.right <= width + 1) continue;
-      // Intentional horizontal scrollers clip their children.
+      // Children of horizontal scrollers are clipped by them; the page-level
+      // scrollWidth check below still catches anything that escapes.
       if (element.closest('.no-scrollbar, .overflow-x-auto, dialog:not([open]), [aria-hidden="true"]')) continue;
       offenders.push(`${element.tagName.toLowerCase()}.${String(element.getAttribute('class') ?? '').slice(0, 80)} → ${Math.round(rect.right)}px`);
     }

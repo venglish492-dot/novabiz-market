@@ -1,6 +1,8 @@
 import type { NextConfig } from 'next';
 
 const isDev = process.env.NODE_ENV !== 'production';
+/** HTTPS-only directives (upgrade, HSTS) are sent only when the site is served over HTTPS. */
+const httpsSite = !isDev && (process.env.NEXT_PUBLIC_SITE_URL || 'https://vektorlab.uz').startsWith('https://');
 
 function supabaseOrigin(): URL | null {
   try {
@@ -32,7 +34,7 @@ const csp = [
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self' https://checkout.stripe.com",
-  ...(isDev ? [] : ['upgrade-insecure-requests']),
+  ...(httpsSite ? ['upgrade-insecure-requests'] : []),
 ].join('; ');
 
 const securityHeaders = [
@@ -42,7 +44,7 @@ const securityHeaders = [
   { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
   { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), payment=(self "https://checkout.stripe.com")' },
   { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
-  ...(isDev ? [] : [{ key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' }]),
+  ...(httpsSite ? [{ key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' }] : []),
 ];
 
 const nextConfig: NextConfig = {

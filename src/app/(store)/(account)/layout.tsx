@@ -12,8 +12,8 @@ export default async function AccountLayout({ children }: { children: React.Reac
         <p className="t-eyebrow">{t.account.eyebrow}</p>
         <p className="text-sm text-fg-muted">{user.email}</p>
       </div>
-      <div className="grid gap-8 lg:grid-cols-[200px_1fr] lg:gap-14">
-        <aside className="lg:sticky lg:top-24 lg:self-start">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[200px_minmax(0,1fr)] lg:gap-14">
+        <aside className="min-w-0 lg:sticky lg:top-24 lg:self-start">
           <AccountNav />
         </aside>
         <div className="min-w-0">{children}</div>

@@ -43,7 +43,7 @@ export default async function AdminOverviewPage() {
         <StatCard label={a.overview.pendingReviews} value={formatNumber(data.pendingReviews, locale)} />
       </div>
 
-      <div className="mt-10 grid gap-8 xl:grid-cols-[1.6fr_1fr]">
+      <div className="mt-10 grid grid-cols-1 gap-8 xl:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
         <section>
           <h2 className="mb-4 text-base font-semibold text-fg">{a.overview.recentOrders}</h2>
           <Table minWidth={560}>

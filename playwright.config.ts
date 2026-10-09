@@ -31,8 +31,10 @@ export default defineConfig({
     launchOptions: { executablePath },
   },
   projects: [
-    { name: 'desktop', use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } }, testIgnore: /mobile\.spec/ },
+    { name: 'desktop', use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } }, testIgnore: [/mobile\.spec/, /full\//] },
     { name: 'mobile', use: { ...devices['Pixel 7'] }, testMatch: /mobile\.spec/ },
+    // Full purchase lifecycle; needs a configured backend (see tests/e2e/full/backend.ts).
+    { name: 'full', use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } }, testMatch: /full\/.*\.spec/ },
   ],
   webServer: process.env.E2E_BASE_URL
     ? undefined

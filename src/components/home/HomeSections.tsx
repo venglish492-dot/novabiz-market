@@ -227,7 +227,7 @@ export function ProductStrip({ t, locale, content, products }: Base & { products
           }
         />
       </div>
-      <div className="no-scrollbar mt-12 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-4 px-4 pb-2 sm:scroll-px-6 sm:px-6 lg:container-page lg:grid lg:grid-cols-4 lg:gap-5 lg:overflow-visible">
+      <div className="no-scrollbar relative mt-12 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-4 px-4 pb-2 sm:scroll-px-6 sm:px-6 lg:container-page lg:grid lg:grid-cols-4 lg:gap-5 lg:overflow-visible">
         {products.map((product) => (
           <div key={product.id} className="w-[82%] max-w-[340px] shrink-0 snap-start sm:w-[46%] lg:w-auto lg:max-w-none">
             <ProductCard product={product} locale={locale} t={t} />

@@ -177,7 +177,7 @@ export default async function ProductPage({ params }: Props) {
       </div>
 
       <nav aria-label={t.product.overview} className="sticky top-16 z-20 mt-14 border-y border-line glass">
-        <div className="container-page no-scrollbar flex gap-1 overflow-x-auto py-2">
+        <div className="container-page no-scrollbar relative flex gap-1 overflow-x-auto py-2">
           {sectionNav.map((item) => (
             <a key={item.id} href={`#${item.id}`} className="shrink-0 rounded-full px-3 py-1.5 text-[13px] text-fg-muted transition-colors hover:bg-surface-2 hover:text-fg">
               {item.label}

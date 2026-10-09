@@ -38,7 +38,9 @@ export function PaidEffects({ productIds }: { productIds: string[] }) {
     });
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     void import('canvas-confetti').then(({ default: confetti }) => {
-      confetti({
+      // The default instance renders in a blob: Web Worker, which the CSP forbids.
+      const fire = confetti.create(undefined, { resize: true, useWorker: false });
+      fire({
         particleCount: 70,
         spread: 70,
         startVelocity: 32,

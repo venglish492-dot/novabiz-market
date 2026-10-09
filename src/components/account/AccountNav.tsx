@@ -18,7 +18,7 @@ export function AccountNav() {
     { href: '/account/settings', label: t.account.settings },
   ];
   return (
-    <nav aria-label={t.account.nav} className="no-scrollbar -mx-4 flex gap-1 overflow-x-auto px-4 lg:mx-0 lg:flex-col lg:px-0">
+    <nav aria-label={t.account.nav} className="no-scrollbar relative -mx-4 flex gap-1 overflow-x-auto px-4 lg:mx-0 lg:flex-col lg:px-0">
       {items.map((item) => {
         const active = item.exact ? pathname === item.href : pathname === item.href || pathname.startsWith(`${item.href}/`);
         return (

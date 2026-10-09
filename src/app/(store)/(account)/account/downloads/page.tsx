@@ -21,7 +21,7 @@ export default async function DownloadsPage() {
   return (
     <AccountSection title={t.account.downloadsTitle} subtitle={t.account.downloadsSubtitle}>
       {history.length ? (
-        <div className="overflow-x-auto rounded-2xl border border-line">
+        <div className="relative overflow-x-auto rounded-2xl border border-line">
           <table className="w-full min-w-[560px] text-left text-sm">
             <thead className="bg-surface text-xs text-fg-subtle">
               <tr>

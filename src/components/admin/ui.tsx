@@ -27,7 +27,7 @@ export function StatCard({ label, value, hint }: { label: string; value: ReactNo
 
 export function Table({ children, minWidth = 720 }: { children: ReactNode; minWidth?: number }) {
   return (
-    <div className="overflow-x-auto rounded-2xl border border-line">
+    <div className="relative overflow-x-auto rounded-2xl border border-line">
       <table className="w-full text-left text-sm" style={{ minWidth }}>
         {children}
       </table>
@@ -59,7 +59,7 @@ export function EmptyRow({ colSpan, label }: { colSpan: number; label: string })
 
 export function Panel({ title, children, actions }: { title: string; children: ReactNode; actions?: ReactNode }) {
   return (
-    <section className="rounded-2xl border border-line bg-surface p-5 sm:p-6">
+    <section className="min-w-0 rounded-2xl border border-line bg-surface p-5 sm:p-6">
       <div className="mb-5 flex items-center justify-between gap-4">
         <h2 className="text-base font-semibold text-fg">{title}</h2>
         {actions}

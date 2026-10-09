@@ -4,6 +4,8 @@ import { getI18n } from '@/i18n/server';
 import { siteConfig } from '@/lib/config/site';
 import { Logo } from '@/components/ui/Logo';
 
+
+const PROTECTED = new Set(['/library', '/account']);
 export async function SiteFooter() {
   const { t } = await getI18n();
   const year = new Date().getUTCFullYear();
@@ -79,7 +81,12 @@ export async function SiteFooter() {
                 <ul className="flex flex-col gap-2.5">
                   {column.links.map((link) => (
                     <li key={`${column.title}-${link.href}`}>
-                      <Link href={link.href} className="text-sm text-fg-muted transition-colors hover:text-fg">
+                      <Link
+                        href={link.href}
+                        // Signed-in areas redirect guests to sign-in; prefetching them is wasted work.
+                        prefetch={PROTECTED.has(link.href) ? false : undefined}
+                        className="text-sm text-fg-muted transition-colors hover:text-fg"
+                      >
                         {link.label}
                       </Link>
                     </li>

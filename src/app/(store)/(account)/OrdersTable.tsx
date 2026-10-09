@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/Badge';
 
 export function OrdersTable({ orders, t, locale }: { orders: OrderSummary[]; t: Dictionary; locale: Locale }) {
   return (
-    <div className="overflow-x-auto rounded-2xl border border-line">
+    <div className="relative overflow-x-auto rounded-2xl border border-line">
       <table className="w-full min-w-[640px] text-left text-sm">
         <thead className="bg-surface text-xs text-fg-subtle">
           <tr>

@@ -49,7 +49,7 @@ export function ProductGallery({
         />
       </div>
       {images.length > 1 && (
-        <div className="no-scrollbar flex gap-2 overflow-x-auto" role="tablist" aria-label={title}>
+        <div className="no-scrollbar relative flex gap-2 overflow-x-auto" role="tablist" aria-label={title}>
           {images.map((image, index) => (
             <button
               key={image.url}

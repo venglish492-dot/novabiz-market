@@ -33,7 +33,7 @@ export default async function AdminAnalyticsPage() {
         <StatCard label={a.overview.refunds} value={formatNumber(overview.refundCount, locale)} />
       </div>
 
-      <div className="mt-8 grid gap-6 lg:grid-cols-2">
+      <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
         <Panel title={a.analytics.funnel}>
           {productViews >= 50 ? (
             <ol className="flex flex-col gap-3">
