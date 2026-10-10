@@ -34,7 +34,7 @@ scripts/finalize.sh        loudness-normalize, mux, export final, review and 15 
 - **Visuals.** A Three.js scene is rendered one frame at a time.
   - It contains the black-chrome "Vektor Core", glass panels textured with the real site captures, light tunnels, beams, dust, bloom and a grading pass (grain, vignette, flashes, chromatic aberration on impacts, directional blur on whip pans).
   - Typography is HTML/CSS in the site's own Geist fonts, positioned per frame.
-  - The final export is rendered at 60 fps and folded to 30 fps with a 2-frame blend, which gives natural motion blur.
+  - The delivered version (v1) was rendered at 30 fps. Rendering with `--fps 60` folds each frame pair into one 30 fps frame, adding natural motion blur on fast moves; this roughly doubles the render time to about 45 minutes.
 - **Sound.** Everything is synthesized in NumPy/SciPy at 48 kHz: kick, hats, sub bass, FM plucks, a pad, and 56 sound effects tied to visible events. There are no samples and no third-party music.
 
 ## Requirements
