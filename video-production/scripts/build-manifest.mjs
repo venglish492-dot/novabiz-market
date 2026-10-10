@@ -25,7 +25,7 @@ const manifest = {
   audio: { file: 'audio/vektorlab_reel_mix.wav', normalized: 'audio/vektorlab_reel_mix_norm.wav', source: 'Synthesized by scripts/audio/synth.py from audio/cues.json — no samples or third-party audio', license: 'Original work created for this project' },
   fonts: [{ file: 'assets/fonts/Geist-Latin-Variable.woff2', license: 'SIL OFL 1.1 (Geist by Vercel)' }, { file: 'assets/fonts/GeistMono-Latin-Variable.woff2', license: 'SIL OFL 1.1' }],
   logo: { file: 'assets/brand/vektorlab-mark.svg', source: 'src/app/icon.svg from the website repository' },
-  exports: ['exports/vektorlab_reel_final.mp4', 'exports/vektorlab_reel_15s.mp4', 'previews/vektorlab_reel_review.mp4'].filter((p) => existsSync(root + p)).map((p) => ({ file: p, probe: probe(p) })),
+  exports: ['exports/vektorlab_reel_final.mp4', 'exports/vektorlab_reel_instagram.mp4', 'exports/vektorlab_reel_15s.mp4', 'exports/vektorlab_reel_15s_instagram.mp4', 'previews/vektorlab_reel_review.mp4'].filter((p) => existsSync(root + p)).map((p) => ({ file: p, probe: probe(p) })),
 };
 writeFileSync(`${root}manifest.json`, JSON.stringify(manifest, null, 2));
 console.log('manifest written:', manifest.shots.length, 'shots,', captures.length, 'captures,', manifest.exports.length, 'exports');

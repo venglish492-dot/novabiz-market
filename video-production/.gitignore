@@ -5,3 +5,5 @@ previews/
 generated/
 # Reproducible audio renders (re-run scripts/audio/synth.py).
 audio/*.wav
+# Rendered videos are delivered directly, not versioned (re-run scripts/finalize.sh).
+exports/*.mp4

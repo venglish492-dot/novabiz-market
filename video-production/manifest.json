@@ -1,7 +1,7 @@
 {
   "project": "VektorLab Instagram Reel",
   "url": "https://vektorlab.uz/",
-  "generated": "2026-10-10T20:00:49.325Z",
+  "generated": "2026-10-10T20:27:50.917Z",
   "spec": {
     "width": 1080,
     "height": 1920,
@@ -563,5 +563,126 @@
     "file": "assets/brand/vektorlab-mark.svg",
     "source": "src/app/icon.svg from the website repository"
   },
-  "exports": []
+  "exports": [
+    {
+      "file": "exports/vektorlab_reel_final.mp4",
+      "probe": {
+        "programs": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 1080,
+            "height": 1920,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_name": "aac",
+            "sample_rate": "48000",
+            "channels": 2,
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "30.000000",
+          "size": "94983852"
+        }
+      }
+    },
+    {
+      "file": "exports/vektorlab_reel_instagram.mp4",
+      "probe": {
+        "programs": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 1080,
+            "height": 1920,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_name": "aac",
+            "sample_rate": "48000",
+            "channels": 2,
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "30.016000",
+          "size": "25239013"
+        }
+      }
+    },
+    {
+      "file": "exports/vektorlab_reel_15s.mp4",
+      "probe": {
+        "programs": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 1080,
+            "height": 1920,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_name": "aac",
+            "sample_rate": "48000",
+            "channels": 2,
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "15.000000",
+          "size": "41101160"
+        }
+      }
+    },
+    {
+      "file": "exports/vektorlab_reel_15s_instagram.mp4",
+      "probe": {
+        "programs": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 1080,
+            "height": 1920,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_name": "aac",
+            "sample_rate": "48000",
+            "channels": 2,
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "15.018000",
+          "size": "21175060"
+        }
+      }
+    },
+    {
+      "file": "previews/vektorlab_reel_review.mp4",
+      "probe": {
+        "programs": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 540,
+            "height": 960,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_name": "aac",
+            "sample_rate": "48000",
+            "channels": 2,
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "30.016000",
+          "size": "3321184"
+        }
+      }
+    }
+  ]
 }

@@ -1,12 +1,14 @@
 # VektorLab Instagram Reel — production workspace
 
-This folder holds the reel's pipeline. The website lives in the rest of the repository, and nothing here touches its source, database, auth, payments or deployment.
+This folder holds the reel's pipeline. Rendered videos are listed in `.gitignore` and delivered directly; re-run `scripts/finalize.sh` to recreate them. The website lives in the rest of the repository, and nothing here touches its source, database, auth, payments or deployment.
 
 ## Deliverables
 
 | File | What it is |
 |---|---|
-| `exports/vektorlab_reel_final.mp4` | Main Reel. 30 s, 1080×1920, 30 fps, H.264 High, AAC 320k stereo 48 kHz, −14 LUFS. |
+| `exports/vektorlab_reel_final.mp4` | Main Reel master. 30 s, 1080×1920, 30 fps, H.264 High (CRF 16), AAC 320k stereo 48 kHz, −14 LUFS. |
+| `exports/vektorlab_reel_instagram.mp4` | Upload copy of the master. Two-pass 6.8 Mbps, about 24 MB. |
+| `exports/vektorlab_reel_15s_instagram.mp4` | Upload copy of the 15 s cut, about 20 MB. |
 | `exports/vektorlab_reel_15s.mp4` | 15 s alternate cut. Seven segments cut on the beat grid. |
 | `previews/vektorlab_reel_review.mp4` | Lightweight 540×960 review copy. |
 | `reference-analysis.md` | Frame-level analysis of the supplied reference MP4. |

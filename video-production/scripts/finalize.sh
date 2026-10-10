@@ -36,10 +36,20 @@ for s in $SEGS; do
   a=${s%%:*}; b=${s##*:}
   ffmpeg -hide_banner -loglevel error -y -ss "$a" -to "$b" -i exports/vektorlab_reel_final.mp4 \
     -c:v libx264 -preset slow -crf 16 -pix_fmt yuv420p -r 30 -c:a pcm_s16le -ar 48000 \
-    -af "afade=t=in:d=0.02,afade=t=out:st=$(echo "$b - $a - 0.025" | bc):d=0.025" "previews/_seg$i.mkv"
+    -af "afade=t=in:d=0.02,afade=t=out:st=$(printf "%.3f" "$(echo "$b - $a - 0.025" | bc)"):d=0.025" "previews/_seg$i.mkv"
   LIST="$LIST previews/_seg$i.mkv"; i=$((i + 1))
 done
 printf "file '%s'\n" $(echo $LIST | sed 's#previews/##g') > previews/_segs.txt
 (cd previews && ffmpeg -hide_banner -loglevel error -y -f concat -safe 0 -i _segs.txt -c:v libx264 -preset slow -crf 16 -pix_fmt yuv420p -r 30 -c:a aac -b:a 320k -movflags +faststart ../exports/vektorlab_reel_15s.mp4)
 rm -f previews/_seg*.mkv previews/_segs.txt
 echo "exports ready"
+
+# Instagram upload copies: full resolution, two-pass H.264 under 30 MB.
+for spec in "vektorlab_reel_final.mp4 vektorlab_reel_instagram.mp4 6800k" "vektorlab_reel_15s.mp4 vektorlab_reel_15s_instagram.mp4 12000k"; do
+  set -- $spec
+  ffmpeg -hide_banner -loglevel error -y -i "exports/$1" -c:v libx264 -preset slow -b:v "$3" -pass 1 -passlogfile "previews/_x264_$2" -an -f mp4 /dev/null
+  ffmpeg -hide_banner -loglevel error -y -i "exports/$1" -c:v libx264 -preset slow -profile:v high -level 4.2 -b:v "$3" -maxrate "$3" -bufsize 2M -pass 2 -passlogfile "previews/_x264_$2" \
+    -pix_fmt yuv420p -r 30 -c:a aac -b:a 192k -ar 48000 -movflags +faststart "exports/$2"
+done
+rm -f previews/_x264_*
+echo "instagram copies ready"
