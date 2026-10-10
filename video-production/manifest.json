@@ -1,0 +1,567 @@
+{
+  "project": "VektorLab Instagram Reel",
+  "url": "https://vektorlab.uz/",
+  "generated": "2026-10-10T20:00:49.325Z",
+  "spec": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "duration_s": 30,
+    "video": "H.264 High yuv420p",
+    "audio": "AAC stereo 48 kHz, -14 LUFS"
+  },
+  "shots": [
+    {
+      "id": "S01",
+      "start_s": 0,
+      "end_s": 1.5,
+      "frames": [
+        0,
+        45
+      ],
+      "section": "Hook",
+      "description": "Macro push on the black-chrome Vektor Core; light accent at 0.30; \"DON'T START FROM ZERO.\" lands at 0.62",
+      "source": "local-render (Three.js + DOM typography)",
+      "status": "rendered"
+    },
+    {
+      "id": "S02",
+      "start_s": 1.5,
+      "end_s": 2.5,
+      "frames": [
+        45,
+        75
+      ],
+      "section": "Transformation",
+      "description": "Push into the luminous seam; the layers part; light floods",
+      "source": "local-render (Three.js + DOM typography)",
+      "status": "rendered"
+    },
+    {
+      "id": "S03",
+      "start_s": 2.5,
+      "end_s": 4,
+      "frames": [
+        75,
+        120
+      ],
+      "section": "Transformation",
+      "description": "Layers become glass panels that sweep past; axis change; foreground wipe",
+      "source": "local-render (Three.js + DOM typography)",
+      "status": "rendered"
+    },
+    {
+      "id": "S04",
+      "start_s": 4,
+      "end_s": 7,
+      "frames": [
+        120,
+        210
+      ],
+      "section": "Product reveal",
+      "description": "\"READY-MADE SYSTEMS.\" over the real vektorlab.uz home on a floating glass slab with desktop panels in depth; push into the real headline; pull back",
+      "source": "local-render (Three.js + DOM typography)",
+      "status": "rendered"
+    },
+    {
+      "id": "S05a",
+      "start_s": 7,
+      "end_s": 7.45,
+      "frames": [
+        210,
+        224
+      ],
+      "section": "Dimensional products",
+      "description": "Tunnel of light frames",
+      "source": "local-render (Three.js + DOM typography)",
+      "status": "rendered"
+    },
+    {
+      "id": "S05b",
+      "start_s": 7.45,
+      "end_s": 8.45,
+      "frames": [
+        224,
+        253
+      ],
+      "section": "Dimensional products",
+      "description": "SaaS financial model card emerges — FINANCIAL MODELS",
+      "source": "local-render (Three.js + DOM typography)",
+      "status": "rendered"
+    },
+    {
+      "id": "S05c",
+      "start_s": 8.45,
+      "end_s": 9.3,
+      "frames": [
+        253,
+        279
+      ],
+      "section": "Dimensional products",
+      "description": "Orbit; more cards at depth — NOTION WORKSPACES",
+      "source": "local-render (Three.js + DOM typography)",
+      "status": "rendered"
+    },
+    {
+      "id": "S05d",
+      "start_s": 9.3,
+      "end_s": 10,
+      "frames": [
+        279,
+        300
+      ],
+      "section": "Dimensional products",
+      "description": "Whip reveal — PITCH DECKS",
+      "source": "local-render (Three.js + DOM typography)",
+      "status": "rendered"
+    },
+    {
+      "id": "S05e",
+      "start_s": 10,
+      "end_s": 10.6,
+      "frames": [
+        300,
+        318
+      ],
+      "section": "Dimensional products",
+      "description": "Cards snap into a precise grid — PLAYBOOKS",
+      "source": "local-render (Three.js + DOM typography)",
+      "status": "rendered"
+    },
+    {
+      "id": "S05f",
+      "start_s": 10.6,
+      "end_s": 11,
+      "frames": [
+        318,
+        330
+      ],
+      "section": "Dimensional products",
+      "description": "Foreground slab wipe",
+      "source": "local-render (Three.js + DOM typography)",
+      "status": "rendered"
+    },
+    {
+      "id": "S06a",
+      "start_s": 11,
+      "end_s": 11.5,
+      "frames": [
+        330,
+        345
+      ],
+      "section": "Velocity",
+      "description": "Macro chrome detail, fast highlight",
+      "source": "local-render (Three.js + DOM typography)",
+      "status": "rendered"
+    },
+    {
+      "id": "S06b",
+      "start_s": 11.5,
+      "end_s": 12,
+      "frames": [
+        345,
+        360
+      ],
+      "section": "Velocity",
+      "description": "Whip into the real SaaS financial-model product page (mobile)",
+      "source": "local-render (Three.js + DOM typography)",
+      "status": "rendered"
+    },
+    {
+      "id": "S06c",
+      "start_s": 12,
+      "end_s": 12.5,
+      "frames": [
+        360,
+        375
+      ],
+      "section": "Velocity",
+      "description": "Card flips on its vertical axis to the next product",
+      "source": "local-render (Three.js + DOM typography)",
+      "status": "rendered"
+    },
+    {
+      "id": "S06d",
+      "start_s": 12.5,
+      "end_s": 13.2,
+      "frames": [
+        375,
+        396
+      ],
+      "section": "Velocity",
+      "description": "Speed-ramped dive through layered frames",
+      "source": "local-render (Three.js + DOM typography)",
+      "status": "rendered"
+    },
+    {
+      "id": "S06e",
+      "start_s": 13.2,
+      "end_s": 13.8,
+      "frames": [
+        396,
+        414
+      ],
+      "section": "Velocity",
+      "description": "Format chips snap in: XLSX · NOTION · PPTX · PDF",
+      "source": "local-render (Three.js + DOM typography)",
+      "status": "rendered"
+    },
+    {
+      "id": "S06f",
+      "start_s": 13.8,
+      "end_s": 14.35,
+      "frames": [
+        414,
+        431
+      ],
+      "section": "Velocity",
+      "description": "Real search palette snaps into alignment",
+      "source": "local-render (Three.js + DOM typography)",
+      "status": "rendered"
+    },
+    {
+      "id": "S06g",
+      "start_s": 14.35,
+      "end_s": 15,
+      "frames": [
+        431,
+        450
+      ],
+      "section": "Velocity",
+      "description": "Dark-to-electric-blue light sweep",
+      "source": "local-render (Three.js + DOM typography)",
+      "status": "rendered"
+    },
+    {
+      "id": "S07a",
+      "start_s": 15,
+      "end_s": 16.9,
+      "frames": [
+        450,
+        507
+      ],
+      "section": "Message",
+      "description": "\"LESS SEARCHING.\" — one word travels in depth",
+      "source": "local-render (Three.js + DOM typography)",
+      "status": "rendered"
+    },
+    {
+      "id": "S07b",
+      "start_s": 16.9,
+      "end_s": 19,
+      "frames": [
+        507,
+        570
+      ],
+      "section": "Message",
+      "description": "Foreground mask reveals \"MORE BUILDING.\"",
+      "source": "local-render (Three.js + DOM typography)",
+      "status": "rendered"
+    },
+    {
+      "id": "S08a",
+      "start_s": 19,
+      "end_s": 19.8,
+      "frames": [
+        570,
+        594
+      ],
+      "section": "Environment",
+      "description": "Close detail on a real product card",
+      "source": "local-render (Three.js + DOM typography)",
+      "status": "rendered"
+    },
+    {
+      "id": "S08b",
+      "start_s": 19.8,
+      "end_s": 20.8,
+      "frames": [
+        594,
+        624
+      ],
+      "section": "Environment",
+      "description": "Medium: cards at depth",
+      "source": "local-render (Three.js + DOM typography)",
+      "status": "rendered"
+    },
+    {
+      "id": "S08c",
+      "start_s": 20.8,
+      "end_s": 22,
+      "frames": [
+        624,
+        660
+      ],
+      "section": "Environment",
+      "description": "Wide: the whole catalog orbits the core as a helix",
+      "source": "local-render (Three.js + DOM typography)",
+      "status": "rendered"
+    },
+    {
+      "id": "S08d",
+      "start_s": 22,
+      "end_s": 22.6,
+      "frames": [
+        660,
+        678
+      ],
+      "section": "Environment",
+      "description": "Sudden dive toward the core",
+      "source": "local-render (Three.js + DOM typography)",
+      "status": "rendered"
+    },
+    {
+      "id": "S08e",
+      "start_s": 22.6,
+      "end_s": 23,
+      "frames": [
+        678,
+        690
+      ],
+      "section": "Environment",
+      "description": "Alignment and near-silence",
+      "source": "local-render (Three.js + DOM typography)",
+      "status": "rendered"
+    },
+    {
+      "id": "S09a",
+      "start_s": 23,
+      "end_s": 25.6,
+      "frames": [
+        690,
+        768
+      ],
+      "section": "Climax",
+      "description": "Everything converges on the core; camera accelerates",
+      "source": "local-render (Three.js + DOM typography)",
+      "status": "rendered"
+    },
+    {
+      "id": "S09b",
+      "start_s": 25.6,
+      "end_s": 26.1,
+      "frames": [
+        768,
+        783
+      ],
+      "section": "Climax",
+      "description": "The core collapses into a point of light",
+      "source": "local-render (Three.js + DOM typography)",
+      "status": "rendered"
+    },
+    {
+      "id": "S09c",
+      "start_s": 26.1,
+      "end_s": 26.5,
+      "frames": [
+        783,
+        795
+      ],
+      "section": "Climax",
+      "description": "Minimal: one blue point in the dark",
+      "source": "local-render (Three.js + DOM typography)",
+      "status": "rendered"
+    },
+    {
+      "id": "S10",
+      "start_s": 26.5,
+      "end_s": 30,
+      "frames": [
+        795,
+        900
+      ],
+      "section": "Brand + CTA",
+      "description": "Light beam reveals the real logo, VEKTOR LAB, vektorlab.uz, EXPLORE VEKTOR LAB",
+      "source": "local-render (Three.js + DOM typography)",
+      "status": "rendered"
+    }
+  ],
+  "higgsfield": {
+    "account": {
+      "plan": "free",
+      "credits_before": 10,
+      "credits_after": 8.5
+    },
+    "attempts": [
+      {
+        "id": "H01-video",
+        "model": "seedance_2_0_mini",
+        "params": {
+          "aspect_ratio": "9:16",
+          "duration": 4,
+          "resolution": "720p",
+          "generate_audio": false
+        },
+        "preflight_cost_credits": 4,
+        "status": "blocked",
+        "reason": "Requires basic plan or higher",
+        "prompt_file": "prompts/H01_hook_macro.md"
+      },
+      {
+        "id": "H02-video",
+        "model": "seedance_2_0_mini",
+        "params": {
+          "aspect_ratio": "9:16",
+          "duration": 4,
+          "resolution": "720p",
+          "generate_audio": false
+        },
+        "preflight_cost_credits": 4,
+        "status": "blocked",
+        "reason": "Requires basic plan or higher",
+        "prompt_file": "prompts/H02_climax_converge.md"
+      },
+      {
+        "id": "H01-video-alt",
+        "model": "grok_video_v15_lite",
+        "params": {
+          "aspect_ratio": "9:16",
+          "duration": 4,
+          "resolution": "720p"
+        },
+        "preflight_cost_credits": 4,
+        "status": "blocked",
+        "reason": "Requires basic plan or higher"
+      },
+      {
+        "id": "H01-keyframe",
+        "model": "nano_banana_2 (served as nano_banana_flash)",
+        "job_id": "2e7e6d9f-e1e9-482e-9018-b9f9e0c3d696",
+        "params": {
+          "aspect_ratio": "9:16",
+          "resolution": "1k"
+        },
+        "cost_credits": 1.5,
+        "status": "completed",
+        "output": "768x1376 PNG in the Higgsfield library",
+        "used_in_edit": false,
+        "reason_not_used": "Higgsfield CDN (*.cloudfront.net) is denied by this environment's egress policy, so the file cannot be brought into the local edit",
+        "qc": "Black faceted crystal with a single electric-blue seam, deep black background, fine particles; matches the hook art direction; no text or artefacts visible in the inspection preview"
+      }
+    ],
+    "cost_estimate_full_plan": "Seedance 2.0 Mini 720p: 4 credits per 4 s clip. A full source library of ~10 clips = ~40 credits plus regenerations; requires a Basic (or higher) plan."
+  },
+  "captures": [
+    {
+      "file": "website-captures/card_01_saas-unit-economics-financial-model.png",
+      "bytes": 77104,
+      "source": "Local production build of commit fdbd095 (identical to vektorlab.uz production), captured with Playwright, EN locale, dark theme"
+    },
+    {
+      "file": "website-captures/card_02_startup-os-notion-workspace.png",
+      "bytes": 68052,
+      "source": "Local production build of commit fdbd095 (identical to vektorlab.uz production), captured with Playwright, EN locale, dark theme"
+    },
+    {
+      "file": "website-captures/card_03_venture-pitch-deck-kit.png",
+      "bytes": 77027,
+      "source": "Local production build of commit fdbd095 (identical to vektorlab.uz production), captured with Playwright, EN locale, dark theme"
+    },
+    {
+      "file": "website-captures/card_04_ecommerce-unit-economics-pnl-cashflow.png",
+      "bytes": 73777,
+      "source": "Local production build of commit fdbd095 (identical to vektorlab.uz production), captured with Playwright, EN locale, dark theme"
+    },
+    {
+      "file": "website-captures/card_05_b2b-cold-outreach-playbook.png",
+      "bytes": 71640,
+      "source": "Local production build of commit fdbd095 (identical to vektorlab.uz production), captured with Playwright, EN locale, dark theme"
+    },
+    {
+      "file": "website-captures/card_06_product-manager-playbook.png",
+      "bytes": 72536,
+      "source": "Local production build of commit fdbd095 (identical to vektorlab.uz production), captured with Playwright, EN locale, dark theme"
+    },
+    {
+      "file": "website-captures/card_07_hr-team-scaling-system.png",
+      "bytes": 81390,
+      "source": "Local production build of commit fdbd095 (identical to vektorlab.uz production), captured with Playwright, EN locale, dark theme"
+    },
+    {
+      "file": "website-captures/card_08_freelance-agency-os.png",
+      "bytes": 79328,
+      "source": "Local production build of commit fdbd095 (identical to vektorlab.uz production), captured with Playwright, EN locale, dark theme"
+    },
+    {
+      "file": "website-captures/catalog_desktop.png",
+      "bytes": 1099189,
+      "source": "Local production build of commit fdbd095 (identical to vektorlab.uz production), captured with Playwright, EN locale, dark theme"
+    },
+    {
+      "file": "website-captures/catalog_grid_desktop.png",
+      "bytes": 1114471,
+      "source": "Local production build of commit fdbd095 (identical to vektorlab.uz production), captured with Playwright, EN locale, dark theme"
+    },
+    {
+      "file": "website-captures/catalog_mobile.png",
+      "bytes": 434080,
+      "source": "Local production build of commit fdbd095 (identical to vektorlab.uz production), captured with Playwright, EN locale, dark theme"
+    },
+    {
+      "file": "website-captures/categories_desktop.png",
+      "bytes": 995788,
+      "source": "Local production build of commit fdbd095 (identical to vektorlab.uz production), captured with Playwright, EN locale, dark theme"
+    },
+    {
+      "file": "website-captures/home_featured_desktop.png",
+      "bytes": 986647,
+      "source": "Local production build of commit fdbd095 (identical to vektorlab.uz production), captured with Playwright, EN locale, dark theme"
+    },
+    {
+      "file": "website-captures/home_hero_desktop.png",
+      "bytes": 2949008,
+      "source": "Local production build of commit fdbd095 (identical to vektorlab.uz production), captured with Playwright, EN locale, dark theme"
+    },
+    {
+      "file": "website-captures/home_hero_mobile.png",
+      "bytes": 2369532,
+      "source": "Local production build of commit fdbd095 (identical to vektorlab.uz production), captured with Playwright, EN locale, dark theme"
+    },
+    {
+      "file": "website-captures/pdp_saas-unit-economics-financial-model_desktop.png",
+      "bytes": 1047435,
+      "source": "Local production build of commit fdbd095 (identical to vektorlab.uz production), captured with Playwright, EN locale, dark theme"
+    },
+    {
+      "file": "website-captures/pdp_saas_mobile.png",
+      "bytes": 1043554,
+      "source": "Local production build of commit fdbd095 (identical to vektorlab.uz production), captured with Playwright, EN locale, dark theme"
+    },
+    {
+      "file": "website-captures/pdp_startup-os-notion-workspace_desktop.png",
+      "bytes": 995569,
+      "source": "Local production build of commit fdbd095 (identical to vektorlab.uz production), captured with Playwright, EN locale, dark theme"
+    },
+    {
+      "file": "website-captures/pdp_venture-pitch-deck-kit_desktop.png",
+      "bytes": 1019112,
+      "source": "Local production build of commit fdbd095 (identical to vektorlab.uz production), captured with Playwright, EN locale, dark theme"
+    },
+    {
+      "file": "website-captures/search_palette_desktop.png",
+      "bytes": 401191,
+      "source": "Local production build of commit fdbd095 (identical to vektorlab.uz production), captured with Playwright, EN locale, dark theme"
+    }
+  ],
+  "audio": {
+    "file": "audio/vektorlab_reel_mix.wav",
+    "normalized": "audio/vektorlab_reel_mix_norm.wav",
+    "source": "Synthesized by scripts/audio/synth.py from audio/cues.json — no samples or third-party audio",
+    "license": "Original work created for this project"
+  },
+  "fonts": [
+    {
+      "file": "assets/fonts/Geist-Latin-Variable.woff2",
+      "license": "SIL OFL 1.1 (Geist by Vercel)"
+    },
+    {
+      "file": "assets/fonts/GeistMono-Latin-Variable.woff2",
+      "license": "SIL OFL 1.1"
+    }
+  ],
+  "logo": {
+    "file": "assets/brand/vektorlab-mark.svg",
+    "source": "src/app/icon.svg from the website repository"
+  },
+  "exports": []
+}

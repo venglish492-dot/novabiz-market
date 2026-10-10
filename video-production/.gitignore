@@ -1,0 +1,7 @@
+# Third-party reference media stays local (analysis notes are in reference-analysis.md).
+references/
+# Intermediate renders, stills and debug frames — reproducible from scripts.
+previews/
+generated/
+# Reproducible audio renders (re-run scripts/audio/synth.py).
+audio/*.wav
