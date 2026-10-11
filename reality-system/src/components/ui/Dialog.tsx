@@ -27,6 +27,7 @@ export function Dialog({ open, onClose, title, description, children, footer, si
   const motionProfile = useMotion()
   const v = modalVariants(motionProfile)
   const panelRef = useRef<HTMLDivElement>(null)
+  const bodyRef = useRef<HTMLDivElement>(null)
   const titleId = useId()
   const descId = useId()
   const onCloseRef = useRef(onClose)
@@ -40,7 +41,11 @@ export function Dialog({ open, onClose, title, description, children, footer, si
     const frame = requestAnimationFrame(() => {
       const panel = panelRef.current
       if (!panel) return
-      const target = (initialFocus && panel.querySelector<HTMLElement>(initialFocus)) || panel.querySelector<HTMLElement>('[data-autofocus]') || panel.querySelector<HTMLElement>(FOCUSABLE)
+      const target =
+        (initialFocus && panel.querySelector<HTMLElement>(initialFocus)) ||
+        panel.querySelector<HTMLElement>('[data-autofocus]') ||
+        bodyRef.current?.querySelector<HTMLElement>(FOCUSABLE) ||
+        panel.querySelector<HTMLElement>(FOCUSABLE)
       target?.focus()
     })
     const onKey = (e: KeyboardEvent) => {
@@ -113,7 +118,9 @@ export function Dialog({ open, onClose, title, description, children, footer, si
                 <X className="size-5" aria-hidden />
               </button>
             </header>
-            <div className="flex-1 overflow-y-auto px-pad py-4">{children}</div>
+            <div ref={bodyRef} className="flex-1 overflow-y-auto px-pad py-4">
+              {children}
+            </div>
             {footer && <footer className="flex flex-wrap items-center justify-end gap-2 border-t border-line/70 px-pad py-3">{footer}</footer>}
           </motion.div>
         </div>

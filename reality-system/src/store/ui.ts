@@ -72,7 +72,7 @@ export const useUi = create<UiState>((set) => ({
   pushToast: (t) => {
     const id = newId('t')
     const toast: Toast = { duration: DEFAULT_DURATION[t.kind] ?? 4500, ...t, id }
-    set((s) => ({ toasts: [...s.toasts.slice(-4), toast] }))
+    set((s) => ({ toasts: [...s.toasts.slice(-2), toast] }))
     return id
   },
   dismissToast: (id) => set((s) => ({ toasts: s.toasts.filter((t) => t.id !== id) })),

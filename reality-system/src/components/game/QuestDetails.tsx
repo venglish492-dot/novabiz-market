@@ -51,6 +51,7 @@ function DetailsBody({ questId, occurrenceKey, onClose }: { questId: string; occ
     return { quest, completion, progress, history, goal }
   }, [questId, occurrenceKey])
   const [busy, setBusy] = useState(false)
+  const [optimistic, setOptimistic] = useState<{ base: string | undefined; checked: string[] } | null>(null)
   const [amount, setAmount] = useState('')
   const [confirmDelete, setConfirmDelete] = useState(false)
 
@@ -60,7 +61,8 @@ function DetailsBody({ questId, occurrenceKey, onClose }: { questId: string; occ
   const attr = attributes.get(quest.attributeId)
   const done = !!completion
   const archived = quest.status === 'archived'
-  const checked = progress?.checked ?? []
+  // optimistic state keeps the checkbox responsive while the database write completes
+  const checked = optimistic && optimistic.base === progress?.updatedAt ? optimistic.checked : (progress?.checked ?? [])
   const measured = progress?.measured ?? 0
   const occDate = occurrenceDate(occurrenceKey)
 
@@ -73,6 +75,7 @@ function DetailsBody({ questId, occurrenceKey, onClose }: { questId: string; occ
   const toggleItem = async (id: string) => {
     if (done || archived) return
     const next = checked.includes(id) ? checked.filter((x) => x !== id) : [...checked, id]
+    setOptimistic({ base: progress?.updatedAt, checked: next })
     await saveOccurrenceProgress(quest.id, occurrenceKey, { checked: next })
     if (quest.checklist.length > 0 && quest.checklist.every((c) => next.includes(c.id))) await complete()
   }

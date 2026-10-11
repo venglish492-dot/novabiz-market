@@ -42,6 +42,7 @@ export function CommandPalette() {
   const inputRef = useRef<HTMLInputElement>(null)
 
   const close = () => {
+    inputRef.current?.blur()
     setOpen(false)
     setQuery('')
     setIndex(0)
