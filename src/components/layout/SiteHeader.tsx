@@ -218,9 +218,12 @@ export function SiteHeader({ nav }: { nav: NavData }) {
             </div>
           ) : (
             accountsEnabled && (
-              <div className="ml-1 hidden sm:block">
+              <div className="ml-1 hidden items-center gap-2 sm:flex">
                 <Link href="/login" className={buttonClasses({ variant: 'secondary', size: 'sm' })}>
                   {t.nav.signIn}
+                </Link>
+                <Link href="/register" className={buttonClasses({ variant: 'primary', size: 'sm' })}>
+                  {t.nav.signUp}
                 </Link>
               </div>
             )
@@ -323,9 +326,14 @@ function MobileNav({ nav, onClose }: { nav: NavData; onClose: () => void }) {
             </Link>
           ) : (
             accountsEnabled && (
-              <Link href="/login" onClick={onClose} className={buttonClasses({ variant: 'primary', size: 'md' })}>
-                {t.nav.signIn}
-              </Link>
+              <div className="grid grid-cols-2 gap-2">
+                <Link href="/login" onClick={onClose} className={buttonClasses({ variant: 'secondary', size: 'md' })}>
+                  {t.nav.signIn}
+                </Link>
+                <Link href="/register" onClick={onClose} className={buttonClasses({ variant: 'primary', size: 'md' })}>
+                  {t.nav.signUp}
+                </Link>
+              </div>
             )
           )}
         </div>
