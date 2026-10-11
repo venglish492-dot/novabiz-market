@@ -34,9 +34,35 @@ function offlineServiceWorker(): Plugin {
   }
 }
 
+/**
+ * Production Content-Security-Policy: the built app may only load its own
+ * files. This guarantees no remote fonts, scripts, images or tracking — and
+ * no network requests carrying personal data.
+ */
+function contentSecurityPolicy(): Plugin {
+  const csp = [
+    "default-src 'self'",
+    "script-src 'self'",
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' data: blob:",
+    "font-src 'self' data:",
+    "connect-src 'self'",
+    "worker-src 'self' blob:",
+    "media-src 'self' data: blob:",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'none'",
+  ].join('; ')
+  return {
+    name: 'reality-system-csp',
+    apply: 'build',
+    transformIndexHtml: (html) => html.replace('<meta charset="UTF-8" />', `<meta charset="UTF-8" />\n    <meta http-equiv="Content-Security-Policy" content="${csp}" />`),
+  }
+}
+
 export default defineConfig({
   base: './',
-  plugins: [react(), tailwindcss(), offlineServiceWorker()],
+  plugins: [react(), tailwindcss(), offlineServiceWorker(), contentSecurityPolicy()],
   resolve: {
     alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
   },
