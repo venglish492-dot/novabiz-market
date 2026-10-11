@@ -68,7 +68,15 @@ const loadCachedCatalog = unstable_cache(loadFromDatabase, ['vektor-catalog-v1']
 /** The published catalog for this request (deduplicated per render). */
 export const getCatalog = cache(async (): Promise<Catalog> => {
   if (!publicSupabase.configured) return staticCatalog();
-  return loadCachedCatalog();
+  try {
+    return await loadCachedCatalog();
+  } catch (error) {
+    // A database read failure (e.g. the schema migration has not been
+    // applied yet) must not take down the whole build or site. Fall back to
+    // the bundled seed catalog; the error is already logged in loadFromDatabase.
+    logger.error('catalog.fallback_to_static', { message: error instanceof Error ? error.message : String(error) });
+    return staticCatalog();
+  }
 });
 
 export async function getProductBySlug(slug: string): Promise<Product | undefined> {
