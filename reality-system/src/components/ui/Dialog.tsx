@@ -81,7 +81,7 @@ export function Dialog({ open, onClose, title, description, children, footer, si
   return createPortal(
     <AnimatePresence>
       {open && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center p-0 sm:items-center sm:p-6">
+        <div className="fixed inset-0 z-50 flex items-end justify-center p-0 pt-[env(safe-area-inset-top)] sm:items-center sm:p-6">
           <motion.div
             className="absolute inset-0 bg-black/65"
             variants={v.backdrop}
@@ -121,7 +121,7 @@ export function Dialog({ open, onClose, title, description, children, footer, si
             <div ref={bodyRef} className="flex-1 overflow-y-auto px-pad py-4">
               {children}
             </div>
-            {footer && <footer className="flex flex-wrap items-center justify-end gap-2 border-t border-line/70 px-pad py-3">{footer}</footer>}
+            {footer && <footer className="flex flex-wrap items-center justify-end gap-2 border-t border-line/70 px-pad py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:pb-3">{footer}</footer>}
           </motion.div>
         </div>
       )}

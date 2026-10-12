@@ -107,6 +107,40 @@ The app shows a gentle reminder when your last export is older than 7 days. You 
 
 The database upgrades itself step by step through versioned migrations. Updates never wipe it. Exporting a backup before an update is still a good habit.
 
+## Android app (APK)
+
+The same app is also packaged as an Android app, using Capacitor. It runs fully offline on the phone: every file is inside the APK, so there's no server to start.
+
+- **Storage.** Data lives in the app's private storage on the phone.
+- **No cloud copy.** Google cloud backup and device-to-device transfer are switched off for this app, so your data never leaves the phone automatically.
+- **Backups.** **Settings → Data & backups → Export backup** opens Android's share sheet. Choose where to keep the file (Files, Drive, a USB drive…). **Import backup** opens the file picker.
+- **Separate data.** The phone app and the Windows browser version each keep their own data. To move progress between them, export a backup from one and import it into the other.
+
+### Getting the APK
+
+**Built automatically on GitHub.** Every change to this folder starts the *REALITY SYSTEM – Android APK* workflow (repository → **Actions** tab).
+
+1. Open the latest successful run.
+2. Download **RealitySystem-android-apk** from *Artifacts*. You need to be signed in to GitHub.
+3. Unzip it to get `RealitySystem-<number>.apk`.
+
+You can also start a build manually with **Run workflow**.
+
+**Or build it on your PC.** Install [Android Studio](https://developer.android.com/studio) and open it once so it downloads the Android SDK. Then double-click **`Build Android APK.bat`**. It produces `RealitySystem.apk` in this folder.
+
+### Installing on your phone
+
+1. Copy the APK to the phone (USB, or download it on the phone).
+2. Open it.
+3. Android asks you to allow installing apps from that source (e.g. *Files* or *Chrome*). Allow it for that app only.
+4. Tap **Install**. Android may show a Play Protect notice because the app is not from the Play Store; choose *Install anyway*.
+
+**Updating.** Install the newer APK over the old one, and **do not uninstall first**. Uninstalling an Android app deletes its data. All builds are signed with the same key (`android/app/reality-system.keystore`), so a newer APK installs as an update and keeps your progress. Export a backup before updating anyway.
+
+**About the signing key.** That key is committed to this repository so every build matches. The repository is public, so anyone could sign an app with it. Only install REALITY SYSTEM APKs that you built or downloaded from your own repository's Actions page.
+
+To use a private key instead, create your own keystore and set the `REALITY_KEYSTORE_FILE`, `REALITY_KEYSTORE_PASSWORD`, `REALITY_KEY_ALIAS` and `REALITY_KEY_PASSWORD` environment variables when building. Note that switching keys means one final uninstall: export a backup first.
+
 ## 9. Commands (for the curious)
 
 Run these from inside the `reality-system` folder.
@@ -121,6 +155,7 @@ Run these from inside the `reality-system` folder.
 | `npm run test:e2e` | Browser end-to-end tests (Playwright). Run `npx playwright install chromium` once first. |
 | `npm run lint` / `npm run typecheck` | Code checks |
 | `npm run verify` | Typecheck, lint, unit tests and build in one go |
+| `npm run android:sync` | Build the Android bundle and copy it into `android/` |
 
 ## 10. Troubleshooting
 

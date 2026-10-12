@@ -39,10 +39,11 @@ function offlineServiceWorker(): Plugin {
  * files. This guarantees no remote fonts, scripts, images or tracking — and
  * no network requests carrying personal data.
  */
-function contentSecurityPolicy(): Plugin {
+function contentSecurityPolicy(android: boolean): Plugin {
   const csp = [
     "default-src 'self'",
-    "script-src 'self'",
+    // The Android wrapper injects one inline bootstrap script into the page.
+    android ? "script-src 'self' 'unsafe-inline'" : "script-src 'self'",
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob:",
     "font-src 'self' data:",
@@ -60,9 +61,10 @@ function contentSecurityPolicy(): Plugin {
   }
 }
 
-export default defineConfig({
+/** `vite build --mode android` produces the bundle packaged into the Android app. */
+export default defineConfig(({ mode }) => ({
   base: './',
-  plugins: [react(), tailwindcss(), offlineServiceWorker(), contentSecurityPolicy()],
+  plugins: [react(), tailwindcss(), ...(mode === 'android' ? [] : [offlineServiceWorker()]), contentSecurityPolicy(mode === 'android')],
   resolve: {
     alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
   },
@@ -79,4 +81,4 @@ export default defineConfig({
     include: ['src/**/*.test.{ts,tsx}'],
     css: false,
   },
-})
+}))

@@ -17,6 +17,7 @@ import { Segmented } from '@/components/ui/Tabs'
 import { Badge } from '@/components/ui/Misc'
 import { formatDateTime } from '@/lib/dates'
 import { formatNumber } from '@/lib/format'
+import { isNativeApp, saveJsonFile } from '@/platform/native'
 
 const TABLE_LABELS: Record<string, string> = {
   config: 'Settings & profile',
@@ -37,18 +38,6 @@ const TABLE_LABELS: Record<string, string> = {
   rewards: 'Rewards',
   notifications: 'Notifications',
   activity: 'Activity events',
-}
-
-function downloadJson(name: string, data: unknown) {
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = name
-  document.body.appendChild(a)
-  a.click()
-  a.remove()
-  window.setTimeout(() => URL.revokeObjectURL(url), 1000)
 }
 
 export function DataSettings() {
@@ -81,9 +70,13 @@ export function DataSettings() {
     setExporting(true)
     try {
       const archive = await buildBackup()
-      downloadJson(backupFileName(), archive)
+      const how = await saveJsonFile(backupFileName(), archive)
       await updateSettings((s) => ({ ...s, general: { ...s.general, lastBackupAt: new Date().toISOString() } }))
-      pushToast({ kind: 'success', title: 'Backup exported', body: 'Saved by your browser to its downloads folder. Keep a copy somewhere safe.' })
+      pushToast({
+        kind: 'success',
+        title: 'Backup exported',
+        body: how === 'shared' ? 'Choose where to keep it (Files, Drive, …) in the share sheet. Keep a copy somewhere safe.' : 'Saved by your browser to its downloads folder. Keep a copy somewhere safe.',
+      })
     } catch (err) {
       pushToast({ kind: 'error', title: 'Export failed', body: err instanceof Error ? err.message : String(err) })
     } finally {
@@ -171,12 +164,24 @@ export function DataSettings() {
 
       <Panel title="Where your data lives" icon={<HardDrive className="size-4" />}>
         <ul className="space-y-2 text-sm text-muted">
-          <li>
-            Data is stored in this browser's <strong className="text-fg">IndexedDB</strong> for <span className="num text-fg">{window.location.origin}</span>, on this device only.
-          </li>
-          <li>Always open the app at the same address — a different address or browser has its own separate storage.</li>
-          <li>Clearing site data / browsing history for this site, uninstalling the browser, or a disk failure can erase it. Export backups regularly.</li>
-          <li>Browser storage is private to your Windows account and browser profile, but it is not encrypted by this app — anyone using the same account and browser profile could read it.</li>
+          {isNativeApp() ? (
+            <>
+              <li>
+                Data is stored in this app's private <strong className="text-fg">IndexedDB</strong> storage on this phone only.
+              </li>
+              <li>Uninstalling the app or using Android's “Clear storage” for it erases your data. Export backups regularly.</li>
+              <li>App storage is private to this app, but it is not encrypted by REALITY SYSTEM — anyone with access to your unlocked phone could open the app.</li>
+            </>
+          ) : (
+            <>
+              <li>
+                Data is stored in this browser's <strong className="text-fg">IndexedDB</strong> for <span className="num text-fg">{window.location.origin}</span>, on this device only.
+              </li>
+              <li>Always open the app at the same address — a different address or browser has its own separate storage.</li>
+              <li>Clearing site data / browsing history for this site, uninstalling the browser, or a disk failure can erase it. Export backups regularly.</li>
+              <li>Browser storage is private to your Windows account and browser profile, but it is not encrypted by this app — anyone using the same account and browser profile could read it.</li>
+            </>
+          )}
         </ul>
         <div className="mt-3 flex flex-wrap gap-2">
           <Badge color={persistence === 'persistent' ? '#34d399' : '#fbbf24'}>{persistence === 'persistent' ? 'Persistent storage granted' : persistence === 'best-effort' ? 'Best-effort storage (browser may evict under pressure)' : 'Persistence status unknown'}</Badge>
@@ -211,7 +216,7 @@ export function DataSettings() {
                   {s.reason}
                   <span className="num block text-xs text-muted">{formatDateTime(s.createdAt, dateFormat)}</span>
                 </span>
-                <Button size="sm" onClick={() => downloadJson(`reality-system-snapshot-${s.createdAt.slice(0, 10)}.json`, JSON.parse(s.json))}>
+                <Button size="sm" onClick={() => void saveJsonFile(`reality-system-snapshot-${s.createdAt.slice(0, 10)}.json`, JSON.parse(s.json))}>
                   Download
                 </Button>
                 <Button size="sm" variant="subtle" onClick={() => setConfirm({ snapshot: s.id })}>

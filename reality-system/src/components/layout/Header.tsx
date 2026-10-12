@@ -37,7 +37,7 @@ export function Header() {
   const name = profile.displayName || 'Player'
 
   return (
-    <header className="sticky top-0 z-20 border-b border-line/50 bg-bg/80 backdrop-blur-md">
+    <header className="sticky top-0 z-20 border-b border-line/50 bg-bg/80 pt-[env(safe-area-inset-top)] backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-[1500px] items-center gap-3 px-4 sm:px-6">
         <div className="min-w-0 flex-1">
           <p className="truncate text-sm text-fg">

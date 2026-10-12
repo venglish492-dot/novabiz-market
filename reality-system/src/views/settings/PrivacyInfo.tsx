@@ -1,5 +1,6 @@
 import { CloudOff, Lock, ShieldCheck, WifiOff } from 'lucide-react'
 import { Panel } from '@/components/ui/Panel'
+import { isNativeApp } from '@/platform/native'
 
 export function PrivacyInfo() {
   return (
@@ -21,7 +22,11 @@ export function PrivacyInfo() {
         </ul>
       </Panel>
       <Panel title="Offline" icon={<WifiOff className="size-4" />}>
-        <p className="text-sm text-muted">After the first launch, the app's own files are cached by a local service worker, so the core app opens and works without an internet connection while the local server is running. Service-worker behaviour depends on your browser. The local server must be running for the app to open (see the README).</p>
+        <p className="text-sm text-muted">
+          {isNativeApp()
+            ? 'Every file of the app is inside the installed APK, so it works completely offline. Your data never leaves this phone unless you export a backup and choose where to send it. Google cloud backup is disabled for this app.'
+            : "After the first launch, the app's own files are cached by a local service worker, so the core app opens and works without an internet connection while the local server is running. Service-worker behaviour depends on your browser. The local server must be running for the app to open (see the README)."}
+        </p>
       </Panel>
       <Panel title="Honest limits" icon={<ShieldCheck className="size-4" />}>
         <ul className="list-disc space-y-2 pl-5 text-sm text-muted">
