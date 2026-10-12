@@ -1,0 +1,84 @@
+import { readFileSync } from 'node:fs'
+import { fileURLToPath, URL } from 'node:url'
+import { createHash } from 'node:crypto'
+import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
+import { defineConfig, type Plugin } from 'vitest/config'
+
+/**
+ * The app is always served from the same fixed origin (http://localhost:4747).
+ * Browser storage (IndexedDB) belongs to an origin, so changing the host or
+ * port would make the saved data look "missing". strictPort makes Vite fail
+ * loudly instead of silently moving to another port.
+ */
+const PORT = 4747
+
+/**
+ * Emits a small, dependency-free service worker that precaches every file of
+ * the production build, so the app can open without a network connection.
+ */
+function offlineServiceWorker(): Plugin {
+  return {
+    name: 'reality-system-offline-sw',
+    apply: 'build',
+    generateBundle(_options, bundle) {
+      const files = Object.keys(bundle).filter((f) => !f.endsWith('.map'))
+      const precache = ['./', './index.html', './manifest.webmanifest', './icon.svg', ...files.map((f) => `./${f}`)]
+      const version = createHash('sha256').update(precache.join('|')).digest('hex').slice(0, 12)
+      const template = readFileSync(fileURLToPath(new URL('./scripts/sw-template.js', import.meta.url)), 'utf8')
+      const source = template
+        .replace('__CACHE_VERSION__', version)
+        .replace('__PRECACHE_LIST__', JSON.stringify(Array.from(new Set(precache))))
+      this.emitFile({ type: 'asset', fileName: 'sw.js', source })
+    },
+  }
+}
+
+/**
+ * Production Content-Security-Policy: the built app may only load its own
+ * files. This guarantees no remote fonts, scripts, images or tracking — and
+ * no network requests carrying personal data.
+ */
+function contentSecurityPolicy(android: boolean): Plugin {
+  const csp = [
+    "default-src 'self'",
+    // The Android wrapper injects one inline bootstrap script into the page.
+    android ? "script-src 'self' 'unsafe-inline'" : "script-src 'self'",
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' data: blob:",
+    "font-src 'self' data:",
+    "connect-src 'self'",
+    "worker-src 'self' blob:",
+    "media-src 'self' data: blob:",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'none'",
+  ].join('; ')
+  return {
+    name: 'reality-system-csp',
+    apply: 'build',
+    transformIndexHtml: (html) => html.replace('<meta charset="UTF-8" />', `<meta charset="UTF-8" />\n    <meta http-equiv="Content-Security-Policy" content="${csp}" />`),
+  }
+}
+
+/** `vite build --mode android` produces the bundle packaged into the Android app. */
+export default defineConfig(({ mode }) => ({
+  base: './',
+  plugins: [react(), tailwindcss(), ...(mode === 'android' ? [] : [offlineServiceWorker()]), contentSecurityPolicy(mode === 'android')],
+  resolve: {
+    alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
+  },
+  server: { host: 'localhost', port: PORT, strictPort: true },
+  preview: { host: 'localhost', port: PORT, strictPort: true },
+  build: {
+    target: 'es2022',
+    chunkSizeWarningLimit: 1200,
+  },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: ['./src/test/setup.ts'],
+    include: ['src/**/*.test.{ts,tsx}'],
+    css: false,
+  },
+}))

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="rs_background">#050914</color>
+    <color name="colorPrimary">#050914</color>
+    <color name="colorPrimaryDark">#050914</color>
+    <color name="colorAccent">#38BDF8</color>
+</resources>

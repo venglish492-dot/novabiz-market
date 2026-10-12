@@ -1,0 +1,233 @@
+@import 'tailwindcss';
+
+/* Theme tokens are CSS variables set at runtime (see src/theme/apply.ts). */
+:root {
+  --rs-bg: #050914;
+  --rs-bg2: #0b1838;
+  --rs-surface: #0a1226;
+  --rs-surface2: #101b36;
+  --rs-border: #1d2b4e;
+  --rs-text: #e6f0ff;
+  --rs-muted: #8ea3c7;
+  --rs-accent: #38bdf8;
+  --rs-accent2: #8b5cf6;
+  --rs-highlight: #e2b955;
+  --rs-success: #34d399;
+  --rs-warning: #fbbf24;
+  --rs-danger: #f87171;
+  --rs-on-accent: #050816;
+  --rs-accent-rgb: 56 189 248;
+  --rs-accent2-rgb: 139 92 246;
+  --rs-bg-rgb: 5 9 20;
+  --rs-surface-rgb: 10 18 38;
+
+  --rs-gap: 1rem;
+  --rs-pad: 1.25rem;
+  --rs-radius: 14px;
+  color-scheme: dark;
+}
+
+:root[data-density='compact'] {
+  --rs-gap: 0.65rem;
+  --rs-pad: 0.85rem;
+  --rs-radius: 10px;
+}
+:root[data-density='spacious'] {
+  --rs-gap: 1.5rem;
+  --rs-pad: 1.75rem;
+  --rs-radius: 18px;
+}
+
+@theme inline {
+  --color-bg: var(--rs-bg);
+  --color-bg2: var(--rs-bg2);
+  --color-surface: var(--rs-surface);
+  --color-surface2: var(--rs-surface2);
+  --color-line: var(--rs-border);
+  --color-fg: var(--rs-text);
+  --color-muted: var(--rs-muted);
+  --color-accent: var(--rs-accent);
+  --color-accent2: var(--rs-accent2);
+  --color-highlight: var(--rs-highlight);
+  --color-success: var(--rs-success);
+  --color-warning: var(--rs-warning);
+  --color-danger: var(--rs-danger);
+  --color-on-accent: var(--rs-on-accent);
+
+  --font-display: 'Orbitron Variable', 'Segoe UI', system-ui, sans-serif;
+  --font-sans: 'Inter Variable', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', 'Cascadia Mono', Consolas, ui-monospace, monospace;
+
+  --spacing-gap: var(--rs-gap);
+  --spacing-pad: var(--rs-pad);
+  --radius-panel: var(--rs-radius);
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    margin: 0;
+    background: var(--rs-bg);
+    color: var(--rs-text);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+  ::selection {
+    background: color-mix(in srgb, var(--rs-accent) 35%, transparent);
+  }
+  :focus-visible {
+    outline: 2px solid var(--rs-accent);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  button,
+  [role='button'] {
+    cursor: pointer;
+  }
+  button:disabled {
+    cursor: not-allowed;
+  }
+  input,
+  textarea,
+  select {
+    font: inherit;
+    color: inherit;
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--rs-accent) 30%, transparent) transparent;
+  }
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+}
+
+@layer components {
+  /* Layered holographic panel: thin border, subtle inner light, no heavy blur. */
+  .panel {
+    position: relative;
+    background:
+      linear-gradient(180deg, color-mix(in srgb, var(--rs-surface2) 92%, transparent), color-mix(in srgb, var(--rs-surface) 94%, transparent));
+    border: 1px solid color-mix(in srgb, var(--rs-border) 90%, var(--rs-accent) 10%);
+    border-radius: var(--rs-radius);
+    box-shadow:
+      inset 0 1px 0 color-mix(in srgb, var(--rs-accent) 10%, transparent),
+      0 10px 30px -18px rgb(0 0 0 / 0.8);
+  }
+  .panel-glow {
+    box-shadow:
+      inset 0 1px 0 color-mix(in srgb, var(--rs-accent) 18%, transparent),
+      0 0 0 1px color-mix(in srgb, var(--rs-accent) 18%, transparent),
+      0 0 28px -8px color-mix(in srgb, var(--rs-accent) 35%, transparent);
+  }
+  .holo-corners {
+    background-image:
+      linear-gradient(var(--rs-accent), var(--rs-accent)), linear-gradient(var(--rs-accent), var(--rs-accent)),
+      linear-gradient(var(--rs-accent), var(--rs-accent)), linear-gradient(var(--rs-accent), var(--rs-accent));
+    background-size: 14px 1.5px, 1.5px 14px, 14px 1.5px, 1.5px 14px;
+    background-position: 0 0, 0 0, 100% 100%, 100% 100%;
+    background-repeat: no-repeat;
+  }
+  .text-glow {
+    text-shadow: 0 0 18px color-mix(in srgb, var(--rs-accent) 55%, transparent);
+  }
+  .label-caps {
+    font-family: var(--font-display);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-size: 0.68rem;
+    font-weight: 600;
+  }
+  .num {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+  .input {
+    width: 100%;
+    background: color-mix(in srgb, var(--rs-bg) 70%, var(--rs-surface));
+    border: 1px solid var(--rs-border);
+    border-radius: 10px;
+    padding: 0.55rem 0.75rem;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .input:hover {
+    border-color: color-mix(in srgb, var(--rs-border) 50%, var(--rs-accent));
+  }
+  .input:focus {
+    outline: none;
+    border-color: var(--rs-accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--rs-accent) 22%, transparent);
+  }
+  .input[aria-invalid='true'] {
+    border-color: var(--rs-danger);
+  }
+  .input::placeholder {
+    color: color-mix(in srgb, var(--rs-muted) 70%, transparent);
+  }
+  select.input {
+    appearance: none;
+    padding-right: 2rem;
+    background-image: linear-gradient(45deg, transparent 50%, var(--rs-muted) 50%), linear-gradient(135deg, var(--rs-muted) 50%, transparent 50%);
+    background-position: calc(100% - 16px) 55%, calc(100% - 11px) 55%;
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+  }
+  select.input option {
+    background: var(--rs-surface);
+  }
+  .skeleton {
+    background: linear-gradient(90deg, var(--rs-surface2) 25%, color-mix(in srgb, var(--rs-surface2) 70%, var(--rs-accent)) 50%, var(--rs-surface2) 75%);
+    background-size: 200% 100%;
+    animation: rs-shimmer 1.6s linear infinite;
+    border-radius: 8px;
+  }
+  .scan-line {
+    background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--rs-accent) 8%, transparent), transparent);
+  }
+}
+
+@keyframes rs-shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+@keyframes rs-pulse-ring {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+@keyframes rs-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes rs-float {
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+/* Reduced motion: honour both the OS hint and the in-app preference. */
+:root[data-reduced-motion='true'] *,
+:root[data-reduced-motion='true'] *::before,
+:root[data-reduced-motion='true'] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
