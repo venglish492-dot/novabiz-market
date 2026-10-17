@@ -1,5 +1,7 @@
 # Vektor Lab
 
+> **New:** this repository also contains **VYBE**, a cinematic link-in-bio platform, as a separate app in [`vybe/`](vybe/README.md). The Vektor Lab marketplace below is unchanged.
+
 Marketplace of professional digital products — financial models, Notion workspaces, playbooks and
 presentation kits — at **[vektorlab.uz](https://vektorlab.uz)**.
 
